@@ -92,15 +92,9 @@ namespace College2Career.Repository
             try
             {
                 var existCompany = await c2CDBContext.Companies.FirstOrDefaultAsync(c => c.companyId == companyId);
-                //if (existCompany == null)
-                //{
-                //    Console.WriteLine("");
-                //} 
-                //else
-                //{
-                    existCompany.status = "rejected";
-                    await c2CDBContext.SaveChangesAsync();
-                //}
+
+                existCompany.status = "rejected";
+                await c2CDBContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {

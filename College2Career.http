@@ -1,0 +1,6 @@
+@College2Career_HostAddress = http://localhost:5140
+
+GET {{College2Career_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

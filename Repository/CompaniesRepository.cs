@@ -1,0 +1,111 @@
+﻿using College2Career.Data;
+using College2Career.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
+
+namespace College2Career.Repository
+{
+    public class CompaniesRepository : ICompaniesRepository
+    {
+        private readonly C2CDBContext c2CDBContext;
+
+        public CompaniesRepository(C2CDBContext c2CDBContext)
+        {
+            this.c2CDBContext = c2CDBContext;
+        }
+
+
+        public async Task createCompanyProfile(Companies companies)
+        {
+            try
+            {
+
+                await c2CDBContext.Companies.AddAsync(companies);
+                await c2CDBContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in company repository in createCompanyProfile method: " + ex.Message);
+            }
+        }
+
+        public async Task<Companies> getCompaniesProfileByUsersId(int usersId)
+        {
+            try
+            {
+                var existCompany = await c2CDBContext.Companies.FirstOrDefaultAsync(c => c.usersId == usersId);
+                return existCompany;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in company repository in getCompaniesProfileByUsersId method: " + ex.Message);
+                return null;
+            }
+        }
+
+        public async Task<Companies> getCompanyByUserId(int usersId)
+        {
+            try
+            {
+                var existCompany = await c2CDBContext.Companies.FirstOrDefaultAsync(c => c.usersId == usersId);
+                return existCompany;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in company repository in getCompanyByUserId method: " + ex.Message);
+                return null;
+            }
+        }
+
+        public async Task<List<Companies>> getPendingStatus()
+        {
+            try
+            {
+                var pendingCompanies = await c2CDBContext.Companies.Where(c => c.status == "pending").ToListAsync();
+                return pendingCompanies;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in company repository in getPendingStatus method: " + ex.Message);
+                return null;
+            }
+        }
+
+
+        public async Task activeCompanyStatus(int companyId)
+        {
+            try
+            {
+                var existCompany = await c2CDBContext.Companies.FirstOrDefaultAsync(c => c.companyId == companyId);
+
+                existCompany.status = "active";
+                await c2CDBContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in company repository in activeCompanyStatus method: " + ex.Message);
+            }
+        }
+
+        public async Task rejectCompanyStatus(int companyId)
+        {
+            try
+            {
+                var existCompany = await c2CDBContext.Companies.FirstOrDefaultAsync(c => c.companyId == companyId);
+                //if (existCompany == null)
+                //{
+                //    Console.WriteLine("");
+                //} 
+                //else
+                //{
+                    existCompany.status = "rejected";
+                    await c2CDBContext.SaveChangesAsync();
+                //}
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in company repository in rejectCompanyStatus method: " + ex.Message);
+            }
+        }
+    }
+}

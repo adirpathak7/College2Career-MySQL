@@ -71,35 +71,25 @@ namespace College2Career.Repository
             }
         }
 
-
-        public async Task activeCompanyStatus(int companyId)
+        public async Task<Companies> updateCompanyStatus(int companyId, string status, string statusReason)
         {
             try
             {
                 var existCompany = await c2CDBContext.Companies.FirstOrDefaultAsync(c => c.companyId == companyId);
+                if (existCompany == null) return null;
 
-                existCompany.status = "active";
+                existCompany.status = status;
+                existCompany.reasonOfStatus = statusReason;
                 await c2CDBContext.SaveChangesAsync();
+
+                return existCompany;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR occured in company repository in activeCompanyStatus method: " + ex.Message);
+                Console.WriteLine("ERROR occured in company repository in updateCompanyStatus method: " + ex.Message);
+                return null;
             }
         }
 
-        public async Task rejectCompanyStatus(int companyId)
-        {
-            try
-            {
-                var existCompany = await c2CDBContext.Companies.FirstOrDefaultAsync(c => c.companyId == companyId);
-
-                existCompany.status = "rejected";
-                await c2CDBContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERROR occured in company repository in rejectCompanyStatus method: " + ex.Message);
-            }
-        }
     }
 }

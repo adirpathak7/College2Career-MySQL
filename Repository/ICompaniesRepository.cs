@@ -10,7 +10,6 @@ namespace College2Career.Repository
 
         public Task<Companies> getCompaniesProfileByUsersId(int usersId);
         public Task<List<Companies>> getPendingStatus();
-        public Task activeCompanyStatus(int companyId);
-        public Task rejectCompanyStatus(int companyId);
+        public Task<Companies> updateCompanyStatus(int companyId, string status, string statusReason);
     }
 }

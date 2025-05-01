@@ -173,13 +173,13 @@ namespace College2Career.Service
             }
         }
 
-        public async Task<ServiceResponse<string>> activeCompanyStatus(int companyId)
+        public async Task<ServiceResponse<string>> updateCompanyStatus(int companyId, string status, string statusReason)
         {
             try
             {
                 ServiceResponse<string> response = new ServiceResponse<string>();
 
-                var existCompany = companiesRepository.activeCompanyStatus(companyId);
+                var existCompany = await companiesRepository.updateCompanyStatus(companyId, status, statusReason);
 
                 if (existCompany == null)
                 {
@@ -187,45 +187,21 @@ namespace College2Career.Service
                     response.message = "No company found.";
                     response.status = false;
                 }
-
-                response.data = "1";
-                response.message = "Company status activeted.";
-                response.status = true;
-
-                return response;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERROR in company service in activeCompanyStatus method: " + ex.Message);
-                throw;
-            }
-        }
-
-        public async Task<ServiceResponse<string>> rejectCompanyStatus(int companyId)
-        {
-            try
-            {
-                ServiceResponse<string> response = new ServiceResponse<string>();
-                var existCompany = companiesRepository.rejectCompanyStatus(companyId);
-
-                if(existCompany == null)
+                else
                 {
-                    response.data = "0";
-                    response.message = "No company found.";
-                    response.status = false;
+                    response.data = "1";
+                    response.message = "Company status updated.";
+                    response.status = true;
                 }
 
-                response.data = "1";
-                response.message = "Company status rejected.";
-                response.status = true;
-
                 return response;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in company service in rejectCompanyStatus method: " + ex.Message);
+                Console.WriteLine("ERROR in company service in updateCompanyStatus method: " + ex.Message);
                 throw;
             }
         }
+
     }
 }

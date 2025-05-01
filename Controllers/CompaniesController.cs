@@ -92,13 +92,13 @@ namespace College2Career.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("activeStatus/{companyId}")]
-        public async Task<IActionResult> activeStatus(int companyId)
+        [HttpPatch]
+        [Route("updateCompanyStatus/{companyId}")]
+        public async Task<IActionResult> updateCompanyStatus(int companyId, [FromBody] CompaniesStatusDTO companiesStatusDTO)
         {
             try
             {
-                var result = await companiesService.activeCompanyStatus(companyId);
+                var result = await companiesService.updateCompanyStatus(companyId, companiesStatusDTO.status, companiesStatusDTO.reasonOfStatus);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -108,20 +108,5 @@ namespace College2Career.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("rejectStatus/{companyId}")]
-        public async Task<IActionResult> rejectCompanyStatus(int companyId)
-        {
-            try
-            {
-                var result = await companiesService.rejectCompanyStatus(companyId);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("An Error occured in controller:- " + ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
-            }
-        }
     }
 }

@@ -5,8 +5,11 @@ using System.Net.Mail;
 public interface IEmailService
 {
     Task sendEmail(string to, string subject, string body);
-    string createEmailBody(int roleId, string email);
+    string createSignUpEmailBody(int roleId, string email);
     string createResetPasswordEmailBody(string email, string token);
+    string createActivetedEmailBody(string companyName);
+    string createRejectedEmailBody(string companyName, string rejectReason);
+    string createDeactivatedEmailBody(string companyName, string deactivateReason);
 }
 
 public class EmailService : IEmailService
@@ -16,7 +19,7 @@ public class EmailService : IEmailService
 
     public EmailService(IConfiguration configuration)
     {
-        
+
     }
     public async Task sendEmail(string to, string subject, string body)
     {
@@ -42,7 +45,7 @@ public class EmailService : IEmailService
         }
     }
 
-    public string createEmailBody(int roleId, string email)
+    public string createSignUpEmailBody(int roleId, string email)
     {
         string greeting = $"<h2>Welcome to College2Career, {email}!</h2>";
 
@@ -56,7 +59,7 @@ public class EmailService : IEmailService
             <p>You can now post job opportunities and connect with talented students.</p>
             <p>Start hiring the best candidates today!</p>";
 
-        string footer = "<br><p>Best Regards,<br><b>College2Career Team</b></p>";
+        string footer = "<br><p>Best Regards,<br><b>Team College2Career</b></p>";
 
         switch (roleId)
         {
@@ -82,11 +85,57 @@ public class EmailService : IEmailService
         <p>If you didn’t request this, please ignore this email.</p>
         <p><b>Note:</b> This link will expire in 30 minutes.</p>
         <br>
-        <p>Best Regards,<br><b>College2Career Team</b></p>
+        <p>Best Regards,<br><b>Team College2Career</b></p>
     ";
 
         return emailBody;
     }
 
+    public string createActivetedEmailBody(string companyName)
+    {
+        string body = $@"
+        <p>Dear {companyName} Team,</p>
 
+        <p>We are pleased to inform you that your company profile has been successfully reviewed and approved by our admin team.</p>
+        <p>You can now fully access all features and start using the platform to its fullest potential.</p>
+        <p>Welcome aboard, and we look forward to your valuable contribution to our community!</p>
+        <br>
+        <p>Best Regards,<br><b>Team College2Career</b></p>
+    ";
+
+        return body;
+    }
+
+    public string createRejectedEmailBody(string companyName, string rejectReason)
+    {
+        string body = $@"
+        <p>Dear {companyName} Team,</p>
+
+        <p>Thank you for submitting your company profile for review. After c<areful consideration, we regret to inform you that your profile has been rejected for the following reason:</p>
+        <p>Reason for Rejection: <b> {rejectReason} </b></p>
+        <p>Please review the above reason, make the necessary updates or corrections, and feel free to resubmit your profile for approval.</p>
+        <p>If you have any questions or need assistance, don’t hesitate to contact our support team.</p>
+        <br>
+        <p>Sincerely,<br><b>Team College2Career</b></p>
+    ";
+
+        return body;
+    }
+
+    public string createDeactivatedEmailBody(string companyName, string deactivateReason)
+    {
+        string body = $@"
+        <p>Dear {companyName},</p><br/><br/>
+
+        We hope this message finds you well.<br/><br/>
+        We would like to inform you that your company profile on <strong>College2Career</strong> has been <strong>deactivated</strong> by our administrative team due to the following reason:<br/><br/>
+       🔹 <strong>Reason for Deactivation:</strong> {deactivateReason}<br/><br/>
+        As a result, your company will not be able to access or perform actions on the platform until this issue is resolved.<br/><br/>
+        If you believe this action was taken in error, or if you have any questions or concerns, please feel free to reach out to our support team at <a href='mailto:support@college2career.com'>support@college2career.com</a>.<br/><br/>
+        We value your presence on our platform and look forward to helping you get reactivated soon.<br/><br/>
+        Warm regards,<br/>
+        <strong>Team College2Career</strong>
+    ";
+        return body;
+    }
 }

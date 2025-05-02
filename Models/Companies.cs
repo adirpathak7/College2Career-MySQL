@@ -58,7 +58,7 @@ namespace College2Career.Models
         //public enum companiesStatus
         //{
         //    pending,
-        //    activeted,
+        //    activated,
         //    rejected,
         //    deactivated
         //}

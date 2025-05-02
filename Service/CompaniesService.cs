@@ -2,6 +2,7 @@
 using College2Career.HelperServices;
 using College2Career.Models;
 using College2Career.Repository;
+using Microsoft.VisualBasic;
 
 namespace College2Career.Service
 {
@@ -9,12 +10,13 @@ namespace College2Career.Service
     {
         private readonly ICompaniesRepository companiesRepository;
         private readonly ICloudinaryService cloudinaryService;
+        private readonly IEmailService emailService;
 
-
-        public CompaniesService(ICompaniesRepository companiesRepository, ICloudinaryService cloudinaryService)
+        public CompaniesService(ICompaniesRepository companiesRepository, ICloudinaryService cloudinaryService, IEmailService emailService)
         {
             this.companiesRepository = companiesRepository;
             this.cloudinaryService = cloudinaryService;
+            this.emailService = emailService;
         }
 
 
@@ -189,6 +191,29 @@ namespace College2Career.Service
                 }
                 else
                 {
+                    Console.WriteLine("the statusReason:- " + status);
+
+                    if (status == "activated")
+                    {
+                        string subject = "Your Company Profile Has Been Approved!";
+                        string body = emailService.createActivetedEmailBody(existCompany.companyName);
+                        await emailService.sendEmail(existCompany.Users.email, subject, body);
+                    }
+                    else if (status == "rejected")
+                    {
+                        Console.WriteLine("in the rejected");
+                        string subject = "Company Profile Rejected.";
+                        string body = emailService.createRejectedEmailBody(existCompany.companyName, existCompany.reasonOfStatus);
+                        await emailService.sendEmail(existCompany.Users.email, subject, body);
+                        Console.WriteLine("the body is:- " + body);
+                    }
+                    else if (status == "deactivated")
+                    {
+                        string subject = "Your Company Profile Has Been Deactivated by Admin.";
+                        string body = emailService.createDeactivatedEmailBody(existCompany.companyName, existCompany.reasonOfStatus);
+                        await emailService.sendEmail(existCompany.Users.email, subject, body);
+                    }
+
                     response.data = "1";
                     response.message = "Company status updated.";
                     response.status = true;

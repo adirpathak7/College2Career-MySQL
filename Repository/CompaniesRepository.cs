@@ -75,7 +75,10 @@ namespace College2Career.Repository
         {
             try
             {
-                var existCompany = await c2CDBContext.Companies.FirstOrDefaultAsync(c => c.companyId == companyId);
+                var existCompany = await c2CDBContext.Companies
+                    .Include(c => c.Users).
+                    FirstOrDefaultAsync(c => c.companyId == companyId);
+
                 if (existCompany == null) return null;
 
                 existCompany.status = status;

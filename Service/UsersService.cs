@@ -56,7 +56,7 @@ namespace College2Career.Service
             response.status = true;
 
             string subject = "Welcome to College2Career!";
-            string body = emailService.createEmailBody(usersDTO.roleId, usersDTO.email);
+            string body = emailService.createSignUpEmailBody(usersDTO.roleId, usersDTO.email);
 
             await emailService.sendEmail(usersDTO.email, subject, body);
 

@@ -7,7 +7,7 @@ namespace College2Career.Service
     {
         Task<ServiceResponse<string>> createCompanyProfile(CompaniesDTO companiesDTO, int usersId);
         Task<ServiceResponse<List<CompaniesDTO>>> getCompaniesProfileByUsersId(int usersId);
-        Task<ServiceResponse<List<CompaniesDTO>>> getPendingStatus();
+        Task<ServiceResponse<List<CompaniesDTO>>> getCompanyByPendingStatus();
         Task<ServiceResponse<string>> updateCompanyStatus(int companyId, string status, string statusReason);
     }
 }

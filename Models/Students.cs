@@ -24,11 +24,14 @@ namespace College2Career.Models
         [Column("resume", TypeName = "varchar(500)")]
         public string? resume { get; set; }
 
-        [Column("verified", TypeName = "varchar(15)")]
-        public string? verified { get; set; } = "yes";
+        [Column("status", TypeName = "varchar(15)")]
+        public string? status { get; set; } = "pending";
 
-        [ForeignKey("userId")]
-        public int? userId { get; set; }
+        [Column("statusReason", TypeName = "varchar(255)")]
+        public string? statusReason { get; set; }
+
+        [ForeignKey("usersId")]
+        public int? usersId { get; set; }
 
         [Column("createdAt")]
         public DateTime createdAt { get; set; } = DateTime.Now;
@@ -38,13 +41,15 @@ namespace College2Career.Models
         public Users? Users { get; set; }
         public ICollection<Applications>? Applications { get; set; }
         public ICollection<Placements>? Placements { get; set; }
-        public ICollection<Feedbacks> Feedbacks { get; set; }
+        public ICollection<Feedbacks>? Feedbacks { get; set; }
     }
 
     //public enum isStudentVerified
     //{
-    //    yes,
-    //    no
+    //    pending,
+    //    activated,
+    //    rejected,
+    //    deactivated
     //}
 
 }

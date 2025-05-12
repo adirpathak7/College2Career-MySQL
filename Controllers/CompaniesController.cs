@@ -35,15 +35,13 @@ namespace College2Career.Controllers
         {
             try
             {
-                var extractedUserId = int.Parse(User.FindFirst("usersId")?.Value ?? "0");
-
-                var result = await companiesService.createCompanyProfile(companiesDTO, extractedUserId);
-
+                var extractedUsersId = int.Parse(User.FindFirst("usersId")?.Value ?? "0");
+                var result = await companiesService.createCompanyProfile(companiesDTO, extractedUsersId);
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in controller: " + ex.Message);
+                Console.WriteLine("ERROR in company controller in createCompanyProfile method: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
             }
         }
@@ -66,7 +64,7 @@ namespace College2Career.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in controller: " + ex.Message);
+                Console.WriteLine("ERROR in company controller in getCompaniesProfileByUsersId method: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
             }
         }
@@ -78,7 +76,7 @@ namespace College2Career.Controllers
         {
             try
             {
-                var result = await companiesService.getPendingStatus();
+                var result = await companiesService.getCompanyByPendingStatus();
                 if (result == null)
                 {
                     return NotFound(new { message = "No pending company found." });
@@ -87,7 +85,7 @@ namespace College2Career.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in controller: " + ex.Message);
+                Console.WriteLine("ERROR in company controller in getCompanyByPendingStatus method: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
             }
         }
@@ -103,7 +101,7 @@ namespace College2Career.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in controller: " + ex.Message);
+                Console.WriteLine("ERROR in company controller in updateCompanyStatus method: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
             }
         }

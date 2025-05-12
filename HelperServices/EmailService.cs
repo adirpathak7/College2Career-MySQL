@@ -7,9 +7,9 @@ public interface IEmailService
     Task sendEmail(string to, string subject, string body);
     string createSignUpEmailBody(int roleId, string email);
     string createResetPasswordEmailBody(string email, string token);
-    string createActivetedEmailBody(string companyName);
-    string createRejectedEmailBody(string companyName, string rejectReason);
-    string createDeactivatedEmailBody(string companyName, string deactivateReason);
+    string createActivetedEmailBody(string name, int roleId);
+    string createRejectedEmailBody(string name, string rejectReason, int roleId);
+    string createDeactivatedEmailBody(string name, string deactivateReason, int roleId);
 }
 
 public class EmailService : IEmailService
@@ -91,12 +91,14 @@ public class EmailService : IEmailService
         return emailBody;
     }
 
-    public string createActivetedEmailBody(string companyName)
+    public string createActivetedEmailBody(string name, int roleId)
     {
-        string body = $@"
-        <p>Dear {companyName} Team,</p>
+        string roleLabel = roleId == 1 ? "student" : "company";
 
-        <p>We are pleased to inform you that your company profile has been successfully reviewed and approved by our admin team.</p>
+        string body = $@"
+        <p>Dear {name} Team,</p>
+
+        <p>We are pleased to inform you that your {roleLabel} profile has been successfully reviewed and approved by our admin team.</p>
         <p>You can now fully access all features and start using the platform to its fullest potential.</p>
         <p>Welcome aboard, and we look forward to your valuable contribution to our community!</p>
         <br>
@@ -106,13 +108,15 @@ public class EmailService : IEmailService
         return body;
     }
 
-    public string createRejectedEmailBody(string companyName, string rejectReason)
+    public string createRejectedEmailBody(string name, string rejectReason, int roleId)
     {
-        string body = $@"
-        <p>Dear {companyName} Team,</p>
+        string roleLabel = roleId == 1 ? "student" : "company";
 
-        <p>Thank you for submitting your company profile for review. After c<areful consideration, we regret to inform you that your profile has been rejected for the following reason:</p>
-        <p>Reason for Rejection: <b> {rejectReason} </b></p>
+        string body = $@"
+        <p>Dear {name},</p>
+
+        <p>Thank you for submitting your {roleLabel} profile for review. After careful consideration, we regret to inform you that your profile has been rejected for the following reason:</p>
+        <p>Reason for Rejection: <b>{rejectReason}</b></p>
         <p>Please review the above reason, make the necessary updates or corrections, and feel free to resubmit your profile for approval.</p>
         <p>If you have any questions or need assistance, don’t hesitate to contact our support team.</p>
         <br>
@@ -122,15 +126,17 @@ public class EmailService : IEmailService
         return body;
     }
 
-    public string createDeactivatedEmailBody(string companyName, string deactivateReason)
+    public string createDeactivatedEmailBody(string name, string deactivateReason, int roleId)
     {
+        string roleLabel = roleId == 1 ? "student" : "company";
+
         string body = $@"
-        <p>Dear {companyName},</p><br/><br/>
+        <p>Dear {name},</p><br/><br/>
 
         We hope this message finds you well.<br/><br/>
-        We would like to inform you that your company profile on <strong>College2Career</strong> has been <strong>deactivated</strong> by our administrative team due to the following reason:<br/><br/>
-       🔹 <strong>Reason for Deactivation:</strong> {deactivateReason}<br/><br/>
-        As a result, your company will not be able to access or perform actions on the platform until this issue is resolved.<br/><br/>
+        We would like to inform you that your {roleLabel} profile on <strong>College2Career</strong> has been <strong>deactivated</strong> by our administrative team due to the following reason:<br/><br/>
+        🔹 <strong>Reason for Deactivation:</strong> {deactivateReason}<br/><br/>
+        As a result, your account will not be able to access or perform actions on the platform until this issue is resolved.<br/><br/>
         If you believe this action was taken in error, or if you have any questions or concerns, please feel free to reach out to our support team at <a href='mailto:support@college2career.com'>support@college2career.com</a>.<br/><br/>
         We value your presence on our platform and look forward to helping you get reactivated soon.<br/><br/>
         Warm regards,<br/>

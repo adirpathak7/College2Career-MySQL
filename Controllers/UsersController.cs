@@ -18,7 +18,6 @@ namespace College2Career.Controllers
             this.usersService = usersService;
         }
 
-        //[Authorize]
         [HttpGet]
         [Route("hello")]
         public string hello()

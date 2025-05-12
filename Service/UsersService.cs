@@ -21,7 +21,6 @@ namespace College2Career.Service
         {
             var response = new ServiceResponse<string>();
 
-
             var existUser = await usersRepository.getUserByEmail(usersDTO.email);
             if (existUser != null)
             {

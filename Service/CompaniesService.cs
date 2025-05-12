@@ -36,14 +36,15 @@ namespace College2Career.Service
                     return response;
                 }
 
-                if (usersId == null || usersId == 0)
+                if (usersId == 0)
                 {
                     response.data = "0";
                     response.message = "Unauthorized! Please login again. ";
                     response.status = false;
                 }
 
-                var existingCompany = await companiesRepository.getCompanyByUserId(usersId);
+                var existingCompany = await companiesRepository.getCompaniesProfileByUsersId(usersId);
+                
                 if (existingCompany != null)
                 {
                     response.data = "0";
@@ -81,7 +82,6 @@ namespace College2Career.Service
             }
         }
 
-
         public async Task<ServiceResponse<List<CompaniesDTO>>> getCompaniesProfileByUsersId(int userId)
         {
             try
@@ -89,7 +89,6 @@ namespace College2Career.Service
                 var response = new ServiceResponse<List<CompaniesDTO>>();
 
                 var existCompany = await companiesRepository.getCompaniesProfileByUsersId(userId);
-                Console.WriteLine("existCompany.companyName: " + existCompany.companyName);
                 if (existCompany == null)
                 {
                     response.data = new List<CompaniesDTO>();
@@ -98,7 +97,7 @@ namespace College2Career.Service
                 }
                 else
                 {
-                    var companyDTO = new CompaniesDTO
+                    var companyProfile = new CompaniesDTO
                     {
                         companyId = existCompany.companyId,
                         companyName = existCompany.companyName,
@@ -115,7 +114,7 @@ namespace College2Career.Service
                         createdAt = existCompany.createdAt
                     };
 
-                    response.data = new List<CompaniesDTO> { companyDTO };
+                    response.data = new List<CompaniesDTO> { companyProfile };
                     response.message = "Company profile found.";
                     response.status = true;
                 }
@@ -128,13 +127,13 @@ namespace College2Career.Service
             }
         }
 
-        public async Task<ServiceResponse<List<CompaniesDTO>>> getPendingStatus()
+        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompanyByPendingStatus()
         {
             try
             {
                 var response = new ServiceResponse<List<CompaniesDTO>>();
 
-                var pendingCompanies = await companiesRepository.getPendingStatus();
+                var pendingCompanies = await companiesRepository.getCompanyByPendingStatus();
 
                 if (pendingCompanies == null || !pendingCompanies.Any())
                 {
@@ -144,7 +143,7 @@ namespace College2Career.Service
                 }
                 else
                 {
-                    var pendingDTOs = pendingCompanies.Select(c => new CompaniesDTO
+                    var pendingCompany = pendingCompanies.Select(c => new CompaniesDTO
                     {
                         companyId = c.companyId,
                         companyName = c.companyName,
@@ -161,7 +160,7 @@ namespace College2Career.Service
                         usersId = c.usersId
                     }).ToList();
 
-                    response.data = pendingDTOs;
+                    response.data = pendingCompany;
                     response.message = "Pending companies found.";
                     response.status = true;
                 }
@@ -170,7 +169,7 @@ namespace College2Career.Service
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in company service in getPendingStatus method: " + ex.Message);
+                Console.WriteLine("ERROR in company service in getCompanyByPendingStatus method: " + ex.Message);
                 throw;
             }
         }
@@ -191,26 +190,24 @@ namespace College2Career.Service
                 }
                 else
                 {
-                    Console.WriteLine("the statusReason:- " + status);
-
+                    int roleIdIs = (int)(existCompany.Users.roleId);
+                    Console.WriteLine(roleIdIs);
                     if (status == "activated")
                     {
-                        string subject = "Your Company Profile Has Been Approved!";
-                        string body = emailService.createActivetedEmailBody(existCompany.companyName);
+                        string subject = "<b>Profile Verification</b>";
+                        string body = emailService.createActivetedEmailBody(existCompany.companyName, (int)(existCompany.Users.roleId));
                         await emailService.sendEmail(existCompany.Users.email, subject, body);
                     }
                     else if (status == "rejected")
                     {
-                        Console.WriteLine("in the rejected");
-                        string subject = "Company Profile Rejected.";
-                        string body = emailService.createRejectedEmailBody(existCompany.companyName, existCompany.reasonOfStatus);
+                        string subject = "<b>Profile Verification</b>";
+                        string body = emailService.createRejectedEmailBody(existCompany.companyName, existCompany.reasonOfStatus, (int)(existCompany.Users.roleId));
                         await emailService.sendEmail(existCompany.Users.email, subject, body);
-                        Console.WriteLine("the body is:- " + body);
                     }
                     else if (status == "deactivated")
                     {
-                        string subject = "Your Company Profile Has Been Deactivated by Admin.";
-                        string body = emailService.createDeactivatedEmailBody(existCompany.companyName, existCompany.reasonOfStatus);
+                        string subject = "<b>Profile Verification</b>";
+                        string body = emailService.createDeactivatedEmailBody(existCompany.companyName, existCompany.reasonOfStatus, (int)(existCompany.Users.roleId));
                         await emailService.sendEmail(existCompany.Users.email, subject, body);
                     }
 

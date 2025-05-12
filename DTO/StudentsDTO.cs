@@ -7,9 +7,11 @@
         public string? rollNumber { get; set; }
         public string? course { get; set; }
         public string? graduationYear { get; set; }
-        public string? resume { get; set; }
-        public string? verified { get; set; }
-        public int? userId { get; set; }
+        public FormFile? resume { get; set; }
+        public string? resumeURL { get; set; }
+        public string? status { get; set; }
+        public string? statusReason { get; set; }
+        public int? usersId { get; set; }
         public DateTime? createdAt { get; set; } = DateTime.Now;
     }
 }

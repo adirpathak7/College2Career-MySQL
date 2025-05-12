@@ -24,15 +24,21 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 });
 
 
-// Register Repository
+// Registered Repository
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<ICompaniesRepository, CompaniesRepository>();
 builder.Services.AddScoped<ICollegesRepository, CollegesRepository>();
+builder.Services.AddScoped<IStudentsRepository, StudentsRepository>();
 
-// Register Services
+
+// Registered Services
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<ICompaniesService, CompaniesService>();
 builder.Services.AddScoped<ICollegesService, CollegesService>();
+builder.Services.AddScoped<IStudentsService, StudentsService>();
+
+
+// Registered Helper Services
 builder.Services.AddSingleton<IJWTService, JWTService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();

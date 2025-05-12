@@ -27,7 +27,7 @@ namespace College2Career.Data
             modelBuilder.Entity<Students>()
                .HasOne(s => s.Users)   // Students has one User
                .WithOne(u => u.Students)  // Users has one Student
-               .HasForeignKey<Students>(s => s.userId)  // The foreign key is in Students
+               .HasForeignKey<Students>(s => s.usersId)  // The foreign key is in Students
                .OnDelete(DeleteBehavior.Cascade); // Define delete behavior
 
 

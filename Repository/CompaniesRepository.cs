@@ -19,13 +19,13 @@ namespace College2Career.Repository
         {
             try
             {
-
                 await c2CDBContext.Companies.AddAsync(companies);
                 await c2CDBContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
                 Console.WriteLine("ERROR occured in company repository in createCompanyProfile method: " + ex.Message);
+                throw;
             }
         }
 
@@ -39,25 +39,11 @@ namespace College2Career.Repository
             catch (Exception ex)
             {
                 Console.WriteLine("ERROR occured in company repository in getCompaniesProfileByUsersId method: " + ex.Message);
-                return null;
+                throw;
             }
         }
 
-        public async Task<Companies> getCompanyByUserId(int usersId)
-        {
-            try
-            {
-                var existCompany = await c2CDBContext.Companies.FirstOrDefaultAsync(c => c.usersId == usersId);
-                return existCompany;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERROR occured in company repository in getCompanyByUserId method: " + ex.Message);
-                return null;
-            }
-        }
-
-        public async Task<List<Companies>> getPendingStatus()
+        public async Task<List<Companies>> getCompanyByPendingStatus()
         {
             try
             {
@@ -66,8 +52,8 @@ namespace College2Career.Repository
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR occured in company repository in getPendingStatus method: " + ex.Message);
-                return null;
+                Console.WriteLine("ERROR occured in company repository in getCompanyByPendingStatus method: " + ex.Message);
+                throw;
             }
         }
 
@@ -90,7 +76,7 @@ namespace College2Career.Repository
             catch (Exception ex)
             {
                 Console.WriteLine("ERROR occured in company repository in updateCompanyStatus method: " + ex.Message);
-                return null;
+                throw;
             }
         }
 

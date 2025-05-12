@@ -28,7 +28,7 @@ namespace College2Career.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in controller: " + ex.Message);
+                Console.WriteLine("ERROR in company controller in addCollegesInformation method: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
             }
         }

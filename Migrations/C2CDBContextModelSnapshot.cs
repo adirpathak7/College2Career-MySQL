@@ -379,22 +379,26 @@ namespace College2Career.Migrations
                         .HasColumnType("varchar(15)")
                         .HasColumnName("rollNumber");
 
+                    b.Property<string>("status")
+                        .HasColumnType("varchar(15)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("statusReason")
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("statusReason");
+
                     b.Property<string>("studentName")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("studentName");
 
-                    b.Property<int?>("userId")
+                    b.Property<int?>("usersId")
                         .HasColumnType("int");
-
-                    b.Property<string>("verified")
-                        .HasColumnType("varchar(15)")
-                        .HasColumnName("verified");
 
                     b.HasKey("studentId");
 
-                    b.HasIndex("userId")
+                    b.HasIndex("usersId")
                         .IsUnique()
-                        .HasFilter("[userId] IS NOT NULL");
+                        .HasFilter("[usersId] IS NOT NULL");
 
                     b.ToTable("Students");
                 });
@@ -600,7 +604,7 @@ namespace College2Career.Migrations
                 {
                     b.HasOne("College2Career.Models.Users", "Users")
                         .WithOne("Students")
-                        .HasForeignKey("College2Career.Models.Students", "userId")
+                        .HasForeignKey("College2Career.Models.Students", "usersId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Users");

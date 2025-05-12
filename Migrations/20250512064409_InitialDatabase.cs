@@ -108,16 +108,17 @@ namespace College2Career.Migrations
                     course = table.Column<string>(type: "varchar(25)", nullable: true),
                     graduationYear = table.Column<string>(type: "varchar(15)", nullable: true),
                     resume = table.Column<string>(type: "varchar(500)", nullable: true),
-                    verified = table.Column<string>(type: "varchar(15)", nullable: true),
-                    userId = table.Column<int>(type: "int", nullable: true),
+                    status = table.Column<string>(type: "varchar(15)", nullable: true),
+                    statusReason = table.Column<string>(type: "varchar(255)", nullable: true),
+                    usersId = table.Column<int>(type: "int", nullable: true),
                     createdAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Students", x => x.studentId);
                     table.ForeignKey(
-                        name: "FK_Students_Users_userId",
-                        column: x => x.userId,
+                        name: "FK_Students_Users_usersId",
+                        column: x => x.usersId,
                         principalTable: "Users",
                         principalColumn: "usersId",
                         onDelete: ReferentialAction.Cascade);
@@ -376,11 +377,11 @@ namespace College2Career.Migrations
                 column: "vacancyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_userId",
+                name: "IX_Students_usersId",
                 table: "Students",
-                column: "userId",
+                column: "usersId",
                 unique: true,
-                filter: "[userId] IS NOT NULL");
+                filter: "[usersId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_roleId",

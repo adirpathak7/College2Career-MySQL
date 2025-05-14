@@ -54,7 +54,6 @@ namespace College2Career.Controllers
             try
             {
                 var extractedUserId = int.Parse(User.FindFirst("usersId")?.Value ?? "0");
-                Console.WriteLine("extractedUserId is: " + extractedUserId);
                 var result = await companiesService.getCompaniesProfileByUsersId(extractedUserId);
                 if (result == null)
                 {
@@ -69,6 +68,41 @@ namespace College2Career.Controllers
             }
         }
 
+        [HttpPatch]
+        [Route("updateCompanyStatus/{companyId}")]
+        public async Task<IActionResult> updateCompanyStatus(int companyId, [FromBody] CompaniesStatusDTO companiesStatusDTO)
+        {
+            try
+            {
+                var result = await companiesService.updateCompanyStatus(companyId, companiesStatusDTO.status, companiesStatusDTO.reasonOfStatus);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in company controller in updateCompanyStatus method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("getCompanyAllCompanies")]
+        public async Task<IActionResult> getCompanyAllCompanies()
+        {
+            try
+            {
+                var result = await companiesService.getCompanyAllCompanies();
+                if (result == null)
+                {
+                    return NotFound(new { message = "No company found." });
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in company controller in getCompanyAllCompanies method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
 
         [HttpGet]
         [Route("getCompanyByPendingStatus")]
@@ -90,21 +124,64 @@ namespace College2Career.Controllers
             }
         }
 
-        [HttpPatch]
-        [Route("updateCompanyStatus/{companyId}")]
-        public async Task<IActionResult> updateCompanyStatus(int companyId, [FromBody] CompaniesStatusDTO companiesStatusDTO)
+        [HttpGet]
+        [Route("getCompanyByActivatedStatus")]
+        public async Task<IActionResult> getCompanyByActivatedStatus()
         {
             try
             {
-                var result = await companiesService.updateCompanyStatus(companyId, companiesStatusDTO.status, companiesStatusDTO.reasonOfStatus);
+                var result = await companiesService.getCompanyByActivatedStatus();
+                if (result == null)
+                {
+                    return NotFound(new { message = "No activated company found." });
+                }
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in company controller in updateCompanyStatus method: " + ex.Message);
+                Console.WriteLine("ERROR in company controller in getCompanyByActivatedStatus method: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
             }
         }
 
+        [HttpGet]
+        [Route("getCompanyByRejectedStatus")]
+        public async Task<IActionResult> getCompanyByRejectedStatus()
+        {
+            try
+            {
+                var result = await companiesService.getCompanyByRejectedStatus();
+                if (result == null)
+                {
+                    return NotFound(new { message = "No rejected company found." });
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in company controller in getCompanyByRejectedStatus method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("getCompanyByDeactivatedStatus")]
+        public async Task<IActionResult> getCompanyByDeactivatedStatus()
+        {
+            try
+            {
+                var result = await companiesService.getCompanyByDeactivatedStatus();
+                if (result == null)
+                {
+                    return NotFound(new { message = "No deactivated company found." });
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in company controller in getCompanyByDeactivatedStatus method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
     }
 }

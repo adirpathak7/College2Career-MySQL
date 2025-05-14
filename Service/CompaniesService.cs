@@ -44,7 +44,7 @@ namespace College2Career.Service
                 }
 
                 var existingCompany = await companiesRepository.getCompaniesProfileByUsersId(usersId);
-                
+
                 if (existingCompany != null)
                 {
                     response.data = "0";
@@ -127,6 +127,103 @@ namespace College2Career.Service
             }
         }
 
+        public async Task<ServiceResponse<string>> updateCompanyStatus(int companyId, string status, string statusReason)
+        {
+            try
+            {
+                ServiceResponse<string> response = new ServiceResponse<string>();
+
+                var existCompany = await companiesRepository.updateCompanyStatus(companyId, status, statusReason);
+
+                if (existCompany == null)
+                {
+                    response.data = "0";
+                    response.message = "No company found.";
+                    response.status = false;
+                }
+                else
+                {
+                    int roleIdIs = (int)(existCompany.Users.roleId);
+                    Console.WriteLine(roleIdIs);
+                    if (status == "activated")
+                    {
+                        string subject = "Profile Verification";
+                        string body = emailService.createActivetedEmailBody(existCompany.companyName, (int)(existCompany.Users.roleId));
+                        await emailService.sendEmail(existCompany.Users.email, subject, body);
+                    }
+                    else if (status == "rejected")
+                    {
+                        string subject = "Profile Verification";
+                        string body = emailService.createRejectedEmailBody(existCompany.companyName, existCompany.reasonOfStatus, (int)(existCompany.Users.roleId));
+                        await emailService.sendEmail(existCompany.Users.email, subject, body);
+                    }
+                    else if (status == "deactivated")
+                    {
+                        string subject = "Profile Verification";
+                        string body = emailService.createDeactivatedEmailBody(existCompany.companyName, existCompany.reasonOfStatus, (int)(existCompany.Users.roleId));
+                        await emailService.sendEmail(existCompany.Users.email, subject, body);
+                    }
+
+                    response.data = "1";
+                    response.message = "Company status updated.";
+                    response.status = true;
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in company service in updateCompanyStatus method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompanyAllCompanies()
+        {
+            try
+            {
+                var response = new ServiceResponse<List<CompaniesDTO>>();
+
+                var existCompanies = await companiesRepository.getCompanyAllCompanies();
+
+                if (existCompanies == null || !existCompanies.Any())
+                {
+                    response.data = new List<CompaniesDTO>();
+                    response.message = "No companies found.";
+                    response.status = false;
+                }
+                else
+                {
+                    var allCompannies = existCompanies.Select(c => new CompaniesDTO
+                    {
+                        companyId = c.companyId,
+                        companyName = c.companyName,
+                        area = c.area,
+                        city = c.city,
+                        state = c.state,
+                        establishedDate = c.establishedDate,
+                        contactNumber = c.contactNumber,
+                        profilePictureURL = c.profilePicture,
+                        industry = c.industry,
+                        employeeSize = c.employeeSize,
+                        status = c.status,
+                        reasonOfStatus = c.reasonOfStatus,
+                        usersId = c.usersId
+                    }).ToList();
+
+                    response.data = allCompannies;
+                    response.message = "All companies found.";
+                    response.status = true;
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in company service in getCompanyAllCompanies method: " + ex.Message);
+                throw;
+            }
+        }
         public async Task<ServiceResponse<List<CompaniesDTO>>> getCompanyByPendingStatus()
         {
             try
@@ -174,45 +271,41 @@ namespace College2Career.Service
             }
         }
 
-        public async Task<ServiceResponse<string>> updateCompanyStatus(int companyId, string status, string statusReason)
+        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompanyByActivatedStatus()
         {
             try
             {
-                ServiceResponse<string> response = new ServiceResponse<string>();
+                var response = new ServiceResponse<List<CompaniesDTO>>();
 
-                var existCompany = await companiesRepository.updateCompanyStatus(companyId, status, statusReason);
+                var activatedCompanies = await companiesRepository.getCompanyByActivatedStatus();
 
-                if (existCompany == null)
+                if (activatedCompanies == null || !activatedCompanies.Any())
                 {
-                    response.data = "0";
-                    response.message = "No company found.";
+                    response.data = new List<CompaniesDTO>();
+                    response.message = "No activated companies found.";
                     response.status = false;
                 }
                 else
                 {
-                    int roleIdIs = (int)(existCompany.Users.roleId);
-                    Console.WriteLine(roleIdIs);
-                    if (status == "activated")
+                    var activatedCompany = activatedCompanies.Select(c => new CompaniesDTO
                     {
-                        string subject = "<b>Profile Verification</b>";
-                        string body = emailService.createActivetedEmailBody(existCompany.companyName, (int)(existCompany.Users.roleId));
-                        await emailService.sendEmail(existCompany.Users.email, subject, body);
-                    }
-                    else if (status == "rejected")
-                    {
-                        string subject = "<b>Profile Verification</b>";
-                        string body = emailService.createRejectedEmailBody(existCompany.companyName, existCompany.reasonOfStatus, (int)(existCompany.Users.roleId));
-                        await emailService.sendEmail(existCompany.Users.email, subject, body);
-                    }
-                    else if (status == "deactivated")
-                    {
-                        string subject = "<b>Profile Verification</b>";
-                        string body = emailService.createDeactivatedEmailBody(existCompany.companyName, existCompany.reasonOfStatus, (int)(existCompany.Users.roleId));
-                        await emailService.sendEmail(existCompany.Users.email, subject, body);
-                    }
+                        companyId = c.companyId,
+                        companyName = c.companyName,
+                        area = c.area,
+                        city = c.city,
+                        state = c.state,
+                        establishedDate = c.establishedDate,
+                        contactNumber = c.contactNumber,
+                        profilePictureURL = c.profilePicture,
+                        industry = c.industry,
+                        employeeSize = c.employeeSize,
+                        status = c.status,
+                        reasonOfStatus = c.reasonOfStatus,
+                        usersId = c.usersId
+                    }).ToList();
 
-                    response.data = "1";
-                    response.message = "Company status updated.";
+                    response.data = activatedCompany;
+                    response.message = "Activated companies found.";
                     response.status = true;
                 }
 
@@ -220,10 +313,103 @@ namespace College2Career.Service
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in company service in updateCompanyStatus method: " + ex.Message);
+                Console.WriteLine("ERROR in company service in getCompanyByActivatedStatus method: " + ex.Message);
                 throw;
             }
         }
 
+        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompanyByRejectedStatus()
+        {
+            try
+            {
+                var response = new ServiceResponse<List<CompaniesDTO>>();
+
+                var rejectedCompanies = await companiesRepository.getCompanyByRejectedStatus();
+
+                if (rejectedCompanies == null || !rejectedCompanies.Any())
+                {
+                    response.data = new List<CompaniesDTO>();
+                    response.message = "No rejected companies found.";
+                    response.status = false;
+                }
+                else
+                {
+                    var rejectedCompany = rejectedCompanies.Select(c => new CompaniesDTO
+                    {
+                        companyId = c.companyId,
+                        companyName = c.companyName,
+                        area = c.area,
+                        city = c.city,
+                        state = c.state,
+                        establishedDate = c.establishedDate,
+                        contactNumber = c.contactNumber,
+                        profilePictureURL = c.profilePicture,
+                        industry = c.industry,
+                        employeeSize = c.employeeSize,
+                        status = c.status,
+                        reasonOfStatus = c.reasonOfStatus,
+                        usersId = c.usersId
+                    }).ToList();
+
+                    response.data = rejectedCompany;
+                    response.message = "Rejected companies found.";
+                    response.status = true;
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in company service in getCompanyByRejectedStatus method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompanyByDeactivatedStatus()
+        {
+            try
+            {
+                var response = new ServiceResponse<List<CompaniesDTO>>();
+
+                var deactivatedCompanies = await companiesRepository.getCompanyByDeactivatedStatus();
+
+                if (deactivatedCompanies == null || !deactivatedCompanies.Any())
+                {
+                    response.data = new List<CompaniesDTO>();
+                    response.message = "No deactivated companies found.";
+                    response.status = false;
+                }
+                else
+                {
+                    var deactivatedCompany = deactivatedCompanies.Select(c => new CompaniesDTO
+                    {
+                        companyId = c.companyId,
+                        companyName = c.companyName,
+                        area = c.area,
+                        city = c.city,
+                        state = c.state,
+                        establishedDate = c.establishedDate,
+                        contactNumber = c.contactNumber,
+                        profilePictureURL = c.profilePicture,
+                        industry = c.industry,
+                        employeeSize = c.employeeSize,
+                        status = c.status,
+                        reasonOfStatus = c.reasonOfStatus,
+                        usersId = c.usersId
+                    }).ToList();
+
+                    response.data = deactivatedCompany;
+                    response.message = "Deactivated companies found.";
+                    response.status = true;
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in company service in getCompanyByDeactivatedStatus method: " + ex.Message);
+                throw;
+            }
+        }
     }
 }

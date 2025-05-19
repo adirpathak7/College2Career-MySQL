@@ -30,32 +30,45 @@ namespace College2Career.Repository
         {
             try
             {
-                var existStudent = await c2CDBContext.Students.FirstOrDefaultAsync(c => c.usersId == usersId)
-                            ?? throw new Exception("Student not found for the given user ID.");
+                var existStudent = await c2CDBContext.Students.FirstOrDefaultAsync(c => c.usersId == usersId);
                 return existStudent;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR occured in srudent repository in getStudentsProfileByUsersId method: " + ex.Message);
+                Console.WriteLine("ERROR occured in student repository in getStudentsProfileByUsersId method: " + ex.Message);
                 throw;
             }
         }
 
-        public async Task<List<Students>> getStudentByPendingStatus()
+        public async Task<Students> getStudentProfileByStudentId(int studentId)
         {
             try
             {
-                var existStudent = await c2CDBContext.Students.Where(s => s.status == "pending").ToListAsync()
-                                ?? throw new Exception("Student not found for the given user ID.");
+                var existStudent = await c2CDBContext.Students
+                    .Include(s => s.Users)
+                    .FirstOrDefaultAsync(s => s.studentId == studentId);
                 return existStudent;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR occured in student repository in getStudentByPendingStatus method: " + ex.Message);
+                Console.WriteLine("ERROR occured in student repository in getStudentProfileByStudentId method: " + ex.Message);
                 throw;
             }
         }
 
+        public async Task<Students> getStudentByRollNumber(string rollNumber)
+        {
+            try
+            {
+                var existStudent = await c2CDBContext.Students.FirstOrDefaultAsync(c => c.rollNumber == rollNumber);
+                return existStudent;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in student repository in getStudentByRollNumber method: " + ex.Message);
+                throw;
+            }
+        }
         public async Task<Students> updateStudentStatus(int studentId, string status, string statusReason)
         {
             try
@@ -74,7 +87,102 @@ namespace College2Career.Repository
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR occured in srudent repository in updateStudentStatus method: " + ex.Message);
+                Console.WriteLine("ERROR occured in student repository in updateStudentStatus method: " + ex.Message);
+                throw;
+            }
+        }
+        public async Task<List<Students>> getAllStudents()
+        {
+            try
+            {
+                var allStudents = await c2CDBContext.Students.Include(u => u.Users).ToListAsync();
+                return allStudents;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in student repository in getAllStudents method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<Students>> getStudentsByPendingStatus()
+        {
+            try
+            {
+                var existStudent = await c2CDBContext.Students.Include(u => u.Users).Where(s => s.status == "pending").ToListAsync()
+                                ?? throw new Exception("Student not found for the given user ID.");
+                return existStudent;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in student repository in getStudentsByPendingStatus method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<Students>> getStudentsByActivatedStatus()
+        {
+            try
+            {
+                var pendingStudents = await c2CDBContext.Students.Include(u => u.Users).Where(c => c.status == "activated").ToListAsync();
+                return pendingStudents;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in student repository in getStudentsByActivatedStatus method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<Students>> getStudentsByRejectedStatus()
+        {
+            try
+            {
+                var pendingStudents = await c2CDBContext.Students.Include(u => u.Users).Where(c => c.status == "rejected").ToListAsync();
+                return pendingStudents;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in student repository in getStudentsByRejectedStatus method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<Students>> getStudentsByDeactivatedStatus()
+        {
+            try
+            {
+                var pendingStudents = await c2CDBContext.Students.Include(u => u.Users).Where(c => c.status == "deactivated").ToListAsync();
+                return pendingStudents;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in student repository in getStudentsByDeactivatedStatus method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task updateStudentProfileByStudentId(Students students, int studentId)
+        {
+            try
+            {
+                var existStudent = getStudentProfileByStudentId(studentId);
+
+                if (existStudent != null)
+                {
+                    existStudent.Result.studentName = students.studentName;
+                    existStudent.Result.resume = students.resume;
+                    existStudent.Result.Users.email = students.Users.email;
+                    await c2CDBContext.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new Exception("Student not found for the given user ID.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in student repository in updateStudentProfileByStudentId method: " + ex.Message);
                 throw;
             }
         }

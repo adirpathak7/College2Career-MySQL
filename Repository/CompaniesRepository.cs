@@ -14,7 +14,6 @@ namespace College2Career.Repository
             this.c2CDBContext = c2CDBContext;
         }
 
-
         public async Task createCompanyProfile(Companies companies)
         {
             try
@@ -29,7 +28,7 @@ namespace College2Career.Repository
             }
         }
 
-        public async Task<Companies> getCompaniesProfileByUsersId(int usersId)
+        public async Task<Companies> getCompanyProfileByUsersId(int usersId)
         {
             try
             {
@@ -65,72 +64,88 @@ namespace College2Career.Repository
             }
         }
 
-        public async Task<List<Companies>> getCompanyAllCompanies()
+        public async Task<List<Companies>> getAllCompanies()
         {
             try
             {
-                var allCompanies = await c2CDBContext.Companies.ToListAsync();
+                var allCompanies = await c2CDBContext.Companies.Include(u=>u.Users).ToListAsync();
                 return allCompanies;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR occured in company repository in getCompanyAllCompanies method: " + ex.Message);
+                Console.WriteLine("ERROR occured in company repository in getAllCompanies method: " + ex.Message);
                 throw;
             }
         }
 
-        public async Task<List<Companies>> getCompanyByPendingStatus()
+        public async Task<List<Companies>> getCompaniesByPendingStatus()
         {
             try
             {
-                var pendingCompanies = await c2CDBContext.Companies.Where(c => c.status == "pending").ToListAsync();
+                var pendingCompanies = await c2CDBContext.Companies.Include(u => u.Users).Where(c => c.status == "pending").ToListAsync();
                 return pendingCompanies;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR occured in company repository in getCompanyByPendingStatus method: " + ex.Message);
+                Console.WriteLine("ERROR occured in company repository in getCompaniesByPendingStatus method: " + ex.Message);
                 throw;
             }
         }
 
-        public async Task<List<Companies>> getCompanyByActivatedStatus()
+        public async Task<List<Companies>> getCompaniesByActivatedStatus()
         {
             try
             {
-                var pendingCompanies = await c2CDBContext.Companies.Where(c => c.status == "activated").ToListAsync();
+                var pendingCompanies = await c2CDBContext.Companies.Include(u => u.Users).Where(c => c.status == "activated").ToListAsync();
                 return pendingCompanies;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in company repository in getCompaniesByActivatedStatus method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<Companies>> getCompaniesByRejectedStatus()
+        {
+            try
+            {
+                var pendingCompanies = await c2CDBContext.Companies.Include(u => u.Users).Where(c => c.status == "rejected").ToListAsync();
+                return pendingCompanies;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in company repository in getCompaniesByRejectedStatus method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<Companies>> getCompaniesByDeactivatedStatus()
+        {
+            try
+            {
+                var pendingCompanies = await c2CDBContext.Companies.Include(u => u.Users).Where(c => c.status == "deactivated").ToListAsync();
+                return pendingCompanies;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in company repository in getCompaniesByDeactivatedStatus method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<bool> getCompanyByActivatedStatus(int companyId)
+        {
+            try
+            {
+                var existCompany = await c2CDBContext.Companies.FirstOrDefaultAsync(c => c.companyId == companyId);
+                if (existCompany == null) return false;
+                if (existCompany.status == "activated") return true;
+                else return false;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("ERROR occured in company repository in getCompanyByActivatedStatus method: " + ex.Message);
-                throw;
-            }
-        }
-
-        public async Task<List<Companies>> getCompanyByRejectedStatus()
-        {
-            try
-            {
-                var pendingCompanies = await c2CDBContext.Companies.Where(c => c.status == "rejected").ToListAsync();
-                return pendingCompanies;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERROR occured in company repository in getCompanyByRejectedStatus method: " + ex.Message);
-                throw;
-            }
-        }
-
-        public async Task<List<Companies>> getCompanyByDeactivatedStatus()
-        {
-            try
-            {
-                var pendingCompanies = await c2CDBContext.Companies.Where(c => c.status == "deactivated").ToListAsync();
-                return pendingCompanies;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERROR occured in company repository in getCompanyByDeactivatedStatus method: " + ex.Message);
                 throw;
             }
         }

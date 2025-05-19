@@ -21,18 +21,18 @@ public class CloudinaryService : ICloudinaryService
     }
     public async Task<string> uploadImages(IFormFile file)
     {
-        //Console.WriteLine("file received in CloudinaryService: " + file?.FileName);
+        Console.WriteLine("file received in CloudinaryService: " + file?.FileName);
 
         if (file == null)
         {
             Console.WriteLine("ERROR: No file was received.");
-            return "Error: No file was received.";
+            return null;
         }
 
         if (file.Length == 0)
         {
             Console.WriteLine("ERROR: Uploaded file is empty.");
-            return "Error: Uploaded file is empty.";
+            return null;
         }
 
         try

@@ -4,6 +4,7 @@
     {
         public int companyId { get; set; }
         public string? companyName { get; set; }
+        public string? email { get; set; }
         public string? establishedDate { get; set; }
         public string? contactNumber { get; set; }
         public IFormFile? profilePicture { get; set; }

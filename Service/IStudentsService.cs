@@ -7,7 +7,12 @@ namespace College2Career.Service
     {
         Task<ServiceResponse<string>> createStudentProfile(StudentsDTO studentsDTO, int usersId);
         Task<ServiceResponse<List<StudentsDTO>>> getStudentsProfileByUsersId(int usersId);
-        Task<ServiceResponse<List<StudentsDTO>>> getStudentByPendingStatus();
         Task<ServiceResponse<string>> updateStudentStatus(int studentId, string status, string statusReason);
+        Task<ServiceResponse<List<StudentsDTO>>> getAllStudents();
+        Task<ServiceResponse<List<StudentsDTO>>> getStudentsByPendingStatus();
+        Task<ServiceResponse<List<StudentsDTO>>> getStudentsByActivatedStatus();
+        Task<ServiceResponse<List<StudentsDTO>>> getStudentsByRejectedStatus();
+        Task<ServiceResponse<List<StudentsDTO>>> getStudentsByDeactivatedStatus();
+        Task<ServiceResponse<string>> updateStudentProfileByStudentId(StudentUpdateProfileDTO studentUpdateProfileDTO, int studentId);
     }
 }

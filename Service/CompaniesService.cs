@@ -43,7 +43,7 @@ namespace College2Career.Service
                     response.status = false;
                 }
 
-                var existingCompany = await companiesRepository.getCompaniesProfileByUsersId(usersId);
+                var existingCompany = await companiesRepository.getCompanyProfileByUsersId(usersId);
 
                 if (existingCompany != null)
                 {
@@ -82,13 +82,13 @@ namespace College2Career.Service
             }
         }
 
-        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompaniesProfileByUsersId(int userId)
+        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompanyProfileByUsersId(int userId)
         {
             try
             {
                 var response = new ServiceResponse<List<CompaniesDTO>>();
 
-                var existCompany = await companiesRepository.getCompaniesProfileByUsersId(userId);
+                var existCompany = await companiesRepository.getCompanyProfileByUsersId(userId);
                 if (existCompany == null)
                 {
                     response.data = new List<CompaniesDTO>();
@@ -178,15 +178,15 @@ namespace College2Career.Service
             }
         }
 
-        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompanyAllCompanies()
+        public async Task<ServiceResponse<List<CompaniesDTO>>> getAllCompanies()
         {
             try
             {
                 var response = new ServiceResponse<List<CompaniesDTO>>();
 
-                var existCompanies = await companiesRepository.getCompanyAllCompanies();
+                var existCompanies = await companiesRepository.getAllCompanies();
 
-                if (existCompanies == null || !existCompanies.Any())
+                if (existCompanies == null)
                 {
                     response.data = new List<CompaniesDTO>();
                     response.message = "No companies found.";
@@ -198,6 +198,7 @@ namespace College2Career.Service
                     {
                         companyId = c.companyId,
                         companyName = c.companyName,
+                        email = c.Users.email,
                         area = c.area,
                         city = c.city,
                         state = c.state,
@@ -220,17 +221,17 @@ namespace College2Career.Service
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in company service in getCompanyAllCompanies method: " + ex.Message);
+                Console.WriteLine("ERROR in company service in getAllCompanies method: " + ex.Message);
                 throw;
             }
         }
-        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompanyByPendingStatus()
+        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompaniesByPendingStatus()
         {
             try
             {
                 var response = new ServiceResponse<List<CompaniesDTO>>();
 
-                var pendingCompanies = await companiesRepository.getCompanyByPendingStatus();
+                var pendingCompanies = await companiesRepository.getCompaniesByPendingStatus();
 
                 if (pendingCompanies == null || !pendingCompanies.Any())
                 {
@@ -244,6 +245,7 @@ namespace College2Career.Service
                     {
                         companyId = c.companyId,
                         companyName = c.companyName,
+                        email = c.Users.email,
                         area = c.area,
                         city = c.city,
                         state = c.state,
@@ -266,18 +268,18 @@ namespace College2Career.Service
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in company service in getCompanyByPendingStatus method: " + ex.Message);
+                Console.WriteLine("ERROR in company service in getCompaniesByPendingStatus method: " + ex.Message);
                 throw;
             }
         }
 
-        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompanyByActivatedStatus()
+        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompaniesByActivatedStatus()
         {
             try
             {
                 var response = new ServiceResponse<List<CompaniesDTO>>();
 
-                var activatedCompanies = await companiesRepository.getCompanyByActivatedStatus();
+                var activatedCompanies = await companiesRepository.getCompaniesByActivatedStatus();
 
                 if (activatedCompanies == null || !activatedCompanies.Any())
                 {
@@ -291,6 +293,7 @@ namespace College2Career.Service
                     {
                         companyId = c.companyId,
                         companyName = c.companyName,
+                        email = c.Users.email,
                         area = c.area,
                         city = c.city,
                         state = c.state,
@@ -313,18 +316,18 @@ namespace College2Career.Service
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in company service in getCompanyByActivatedStatus method: " + ex.Message);
+                Console.WriteLine("ERROR in company service in getCompaniesByActivatedStatus method: " + ex.Message);
                 throw;
             }
         }
 
-        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompanyByRejectedStatus()
+        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompaniesByRejectedStatus()
         {
             try
             {
                 var response = new ServiceResponse<List<CompaniesDTO>>();
 
-                var rejectedCompanies = await companiesRepository.getCompanyByRejectedStatus();
+                var rejectedCompanies = await companiesRepository.getCompaniesByRejectedStatus();
 
                 if (rejectedCompanies == null || !rejectedCompanies.Any())
                 {
@@ -338,6 +341,7 @@ namespace College2Career.Service
                     {
                         companyId = c.companyId,
                         companyName = c.companyName,
+                        email = c.Users.email,
                         area = c.area,
                         city = c.city,
                         state = c.state,
@@ -360,18 +364,18 @@ namespace College2Career.Service
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in company service in getCompanyByRejectedStatus method: " + ex.Message);
+                Console.WriteLine("ERROR in company service in getCompaniesByRejectedStatus method: " + ex.Message);
                 throw;
             }
         }
 
-        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompanyByDeactivatedStatus()
+        public async Task<ServiceResponse<List<CompaniesDTO>>> getCompaniesByDeactivatedStatus()
         {
             try
             {
                 var response = new ServiceResponse<List<CompaniesDTO>>();
 
-                var deactivatedCompanies = await companiesRepository.getCompanyByDeactivatedStatus();
+                var deactivatedCompanies = await companiesRepository.getCompaniesByDeactivatedStatus();
 
                 if (deactivatedCompanies == null || !deactivatedCompanies.Any())
                 {
@@ -385,6 +389,7 @@ namespace College2Career.Service
                     {
                         companyId = c.companyId,
                         companyName = c.companyName,
+                        email = c.Users.email,
                         area = c.area,
                         city = c.city,
                         state = c.state,
@@ -407,7 +412,7 @@ namespace College2Career.Service
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in company service in getCompanyByDeactivatedStatus method: " + ex.Message);
+                Console.WriteLine("ERROR in company service in getCompaniesByDeactivatedStatus method: " + ex.Message);
                 throw;
             }
         }

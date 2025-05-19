@@ -49,6 +49,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.WebHost.UseUrls("http://0.0.0.0:7072");
+
 // Allow CORS for College2Career React App
 builder.Services.AddCors(options =>
 {

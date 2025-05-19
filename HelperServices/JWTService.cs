@@ -31,7 +31,7 @@ public class JWTService : IJWTService
                     {
                         new Claim("usersId", users.usersId.ToString()),
                         new Claim("email", users.email),
-                        //new Claim("role", users.roleId.ToString()),
+                        new Claim("roleId", users.roleId.ToString()),
                         new Claim("profilePicture", "https://res.cloudinary.com/druzdz5zn/image/upload/v1744715705/lhi4cgauyc4nqttymcu4.webp")
                     };
 

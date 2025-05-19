@@ -65,13 +65,49 @@ namespace College2Career.Controllers
             }
         }
 
+        [HttpPatch]
+        [Route("updateStudentStatus/{studentId}")]
+        public async Task<IActionResult> updateStudentStatus(int studentId, [FromBody] StudentStatusDTO studentStatusDTO)
+        {
+            try
+            {
+                var result = await studentsService.updateStudentStatus(studentId, studentStatusDTO.status, studentStatusDTO.reasonOfStatus);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in student controller in updateStudentStatus method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
         [HttpGet]
-        [Route("getStudentByPendingStatus")]
+        [Route("getAllStudents")]
+        public async Task<IActionResult> getAllStudents()
+        {
+            try
+            {
+                var result = await studentsService.getAllStudents();
+                if (result == null)
+                {
+                    return NotFound(new { message = "No student found." });
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in student controller in getAllStudents method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("getStudentsByPendingStatus")]
         public async Task<IActionResult> getStudentByPendingStatus()
         {
             try
             {
-                var result = await studentsService.getStudentByPendingStatus();
+                var result = await studentsService.getStudentsByPendingStatus();
                 if (result == null)
                 {
                     return NotFound(new { message = "No pending students found." });
@@ -85,18 +121,79 @@ namespace College2Career.Controllers
             }
         }
 
-        [HttpPatch]
-        [Route("updateStudentStatus/{studentId}")]
-        public async Task<IActionResult> updateStudentStatus(int studentId, [FromForm] StudentStatusDTO studentStatusDTO)
+        [HttpGet]
+        [Route("getStudentsByActivatedStatus")]
+        public async Task<IActionResult> getStudentsByActivatedStatus()
         {
             try
             {
-                var result = await studentsService.updateStudentStatus(studentId, studentStatusDTO.status, studentStatusDTO.reasonOfStatus);
+                var result = await studentsService.getStudentsByActivatedStatus();
+                if (result == null)
+                {
+                    return NotFound(new { message = "No activated students found." });
+                }
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in student controller in updateStudentStatus method: " + ex.Message);
+                Console.WriteLine("ERROR in students controller in getStudentsByActivatedStatus method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("getStudentsByRejectedStatus")]
+        public async Task<IActionResult> getStudentsByRejectedStatus()
+        {
+            try
+            {
+                var result = await studentsService.getStudentsByRejectedStatus();
+                if (result == null)
+                {
+                    return NotFound(new { message = "No rejected students found." });
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in students controller in getStudentsByRejectedStatus method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("getStudentsByDeactivatedStatus")]
+        public async Task<IActionResult> getStudentsByDeactivatedStatus()
+        {
+            try
+            {
+                var result = await studentsService.getStudentsByDeactivatedStatus();
+                if (result == null)
+                {
+                    return NotFound(new { message = "No deactivated students found." });
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in students controller in getStudentsByDeactivatedStatus method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpPut]
+        [Route("updateStudentProfileByStudentId/{studentId}")]
+        public async Task<IActionResult> updateStudentProfileByStudentId(int studentId, [FromForm] StudentUpdateProfileDTO studentUpdateProfileDTO)
+        {
+            try
+            {
+                var result = await studentsService.updateStudentProfileByStudentId(studentUpdateProfileDTO, studentId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in students controller in updateStudentProfileByStudentId method: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
             }
         }

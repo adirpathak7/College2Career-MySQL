@@ -9,23 +9,25 @@ namespace College2Career.Service
     {
         private readonly IVacanciesRepository vacanciesRepository;
         private readonly ICompaniesRepository companiesRepository;
-        public VacanciesService(IVacanciesRepository vacanciesRepository)
+        public VacanciesService(IVacanciesRepository vacanciesRepository, ICompaniesRepository companiesRepository)
         {
             this.vacanciesRepository = vacanciesRepository;
+            this.companiesRepository = companiesRepository;
         }
-        public async Task<ServiceResponse<string>> createVacancies(VacanciesDTO vacanciesDTO, int companyId)
+        public async Task<ServiceResponse<string>> createVacancies(VacanciesDTO vacanciesDTO, int usersId)
         {
             try
             {
                 ServiceResponse<string> serviceResponse = new ServiceResponse<string>();
 
-                var activatedStatus = companiesRepository.getCompanyByActivatedStatus(companyId);
+                var existCompany = await companiesRepository.getCompanyProfileByUsersId(usersId);
 
-                if (activatedStatus.Result == false)
+                if (existCompany == null || existCompany.status != "activated")
                 {
                     serviceResponse.data = "0";
                     serviceResponse.message = "Your company hasn't been approved yet!";
                     serviceResponse.status = false;
+                    return serviceResponse;
                 }
 
                 var newVacancy = new Vacancies
@@ -37,7 +39,8 @@ namespace College2Career.Service
                     timing = vacanciesDTO.timing,
                     package = vacanciesDTO.package,
                     type = vacanciesDTO.type,
-                    locationType = vacanciesDTO.locationType
+                    locationType = vacanciesDTO.locationType,
+                    companyId = existCompany.companyId
                 };
                 await vacanciesRepository.createVacancies(newVacancy);
 
@@ -52,7 +55,6 @@ namespace College2Career.Service
                 Console.WriteLine("ERROR in vacancies service in createVacancies method: " + ex.Message);
                 throw;
             }
-
         }
     }
 }

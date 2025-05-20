@@ -29,6 +29,7 @@ builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<ICompaniesRepository, CompaniesRepository>();
 builder.Services.AddScoped<ICollegesRepository, CollegesRepository>();
 builder.Services.AddScoped<IStudentsRepository, StudentsRepository>();
+builder.Services.AddScoped<IVacanciesRepository, VacanciesRepository>();
 
 
 // Registered Services
@@ -36,6 +37,7 @@ builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<ICompaniesService, CompaniesService>();
 builder.Services.AddScoped<ICollegesService, CollegesService>();
 builder.Services.AddScoped<IStudentsService, StudentsService>();
+builder.Services.AddScoped<IVacanciesService, VacanciesService>();
 
 
 // Registered Helper Services

@@ -35,6 +35,7 @@ namespace College2Career.Controllers
                 Console.WriteLine("ERROR in vacancies controller in createVacancies method: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
             }
+
         }
     }
 }

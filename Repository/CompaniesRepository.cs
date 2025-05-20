@@ -68,7 +68,7 @@ namespace College2Career.Repository
         {
             try
             {
-                var allCompanies = await c2CDBContext.Companies.Include(u=>u.Users).ToListAsync();
+                var allCompanies = await c2CDBContext.Companies.Include(u => u.Users).ToListAsync();
                 return allCompanies;
             }
             catch (Exception ex)

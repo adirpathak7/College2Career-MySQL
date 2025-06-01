@@ -30,8 +30,8 @@ public class JWTService : IJWTService
         var claims = new[]
                     {
                         new Claim("usersId", users.usersId.ToString()),
-                        new Claim("email", users.email),
-                        new Claim("roleId", users.roleId.ToString()),
+                        new Claim(ClaimTypes.Email, users.email),
+                        new Claim(ClaimTypes.Role, users.roleId == 1 ? "student" : "company"),
                         //new Claim("profilePicture", "ht tps://res.cloudinary.com/druzdz5zn/image/upload/v1744715705/lhi4cgauyc4nqttymcu4.webp")
                     };
 

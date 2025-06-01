@@ -13,7 +13,7 @@ namespace College2Career.Models
         public string? reason { get; set; } = null;
 
         [Column("status", TypeName = "varchar(15)")]
-        public string? status { get; set; } = "pending";
+        public string? status { get; set; } = "applied";
 
         [Column("createdAt")]
         public DateTime createdAt { get; set; } = DateTime.Now;
@@ -36,7 +36,7 @@ namespace College2Career.Models
 
     //public enum applicationStatus
     //{
-    //    pending,
+    //    applied,
     //    rejected,
     //    verified,
     //    interviewScheduled,

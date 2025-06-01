@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 using College2Career.Data;
 using College2Career.Repository;
 using College2Career.Service;
@@ -7,10 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Added connection string to the configuration
-//var configuration = builder.Configuration;
-//Console.WriteLine("JWT Key: " + configuration["Jwt:Key"]);
 
 // Register DbContext with SQL Server
 builder.Services.AddDbContext<C2CDBContext>(options =>
@@ -23,14 +20,13 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     serverOptions.ListenAnyIP(7072);
 });
 
-
 // Registered Repository
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<ICompaniesRepository, CompaniesRepository>();
 builder.Services.AddScoped<ICollegesRepository, CollegesRepository>();
 builder.Services.AddScoped<IStudentsRepository, StudentsRepository>();
 builder.Services.AddScoped<IVacanciesRepository, VacanciesRepository>();
-
+builder.Services.AddScoped<IApplicationsRepository, ApplicationsRepository>();
 
 // Registered Services
 builder.Services.AddScoped<IUsersService, UsersService>();
@@ -38,7 +34,7 @@ builder.Services.AddScoped<ICompaniesService, CompaniesService>();
 builder.Services.AddScoped<ICollegesService, CollegesService>();
 builder.Services.AddScoped<IStudentsService, StudentsService>();
 builder.Services.AddScoped<IVacanciesService, VacanciesService>();
-
+builder.Services.AddScoped<IApplicationsService, ApplicationsService>();
 
 // Registered Helper Services
 builder.Services.AddSingleton<IJWTService, JWTService>();
@@ -47,11 +43,12 @@ builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
 // Add services to the container.
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.WebHost.UseUrls("http://0.0.0.0:7072");
+builder.WebHost.UseUrls("http://10.0.2.2:7072");
 
 // Allow CORS for College2Career React App
 builder.Services.AddCors(options =>
@@ -66,7 +63,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-
 // JWT Authentication Configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -80,6 +76,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnForbidden = async context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                context.Response.ContentType = "application/json";
+
+                var response = new
+                {
+                    message = "Unauthorized! Only authorized users can access this endpoint."
+                };
+                await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+            }
         };
     });
 

@@ -22,7 +22,7 @@ namespace College2Career.Models
         public string? totalVacancy { get; set; }
 
         [Column("timing", TypeName = "varchar(50)")]
-        public string? timing { get; set; }
+        public string? timing { get; set; } = null;
 
         [Column("package", TypeName = "varchar(50)")]
         public string? package { get; set; }
@@ -66,7 +66,6 @@ namespace College2Career.Models
     //public enum VacanciesStatus
     //{
     //    hiring,
-    //    pending,
     //    hired
     //}
 }

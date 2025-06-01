@@ -19,7 +19,6 @@ namespace College2Career.Service
             this.emailService = emailService;
         }
 
-
         public async Task<ServiceResponse<string>> createCompanyProfile(CompaniesDTO companiesDTO, int usersId)
         {
             try
@@ -144,7 +143,6 @@ namespace College2Career.Service
                 else
                 {
                     int roleIdIs = (int)(existCompany.Users.roleId);
-                    Console.WriteLine(roleIdIs);
                     if (status == "activated")
                     {
                         string subject = "Profile Verification";

@@ -92,9 +92,10 @@ namespace College2Career.Service
                 var response = new ServiceResponse<List<StudentsDTO>>();
 
                 var existStudent = await studentsRepository.getStudentsProfileByUsersId(usersId);
+
                 if (existStudent == null)
                 {
-                    response.data = new List<StudentsDTO>();
+                    response.data = null;
                     response.message = "No student profile found.";
                     response.status = true;
                 }
@@ -407,7 +408,6 @@ namespace College2Career.Service
                 }
                 else
                 {
-                    Console.WriteLine("the resumeURL: " + studentUpdateProfileDTO.resumeURL);
                     var resumeURL = await cloudinaryService.uploadImages(studentUpdateProfileDTO.resume);
 
                     if (resumeURL == null)

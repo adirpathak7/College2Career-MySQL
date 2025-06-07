@@ -8,5 +8,6 @@ namespace College2Career.Service
     {
         Task<ServiceResponse<string>> newApplications(ApplicationsDTO applicationsDTO, int usersId);
         Task<ServiceResponse<List<VacanciesAppliedStudentsDTO>>> getAllAppliedApplicationsByCompanyId(int usersId);
+        Task<ServiceResponse<string>> updateApplicationsStatusByCompany(int applicationId, UpdateApplicationStatusDTO updateApplicationStatusDTO);
     }
 }

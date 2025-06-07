@@ -25,7 +25,7 @@ namespace College2Career.Controllers
             return "Hello from students!";
         }
 
-        [Authorize]
+        [Authorize(Roles = "student")]
         [HttpPost]
         [Route("createStudentProfile")]
         public async Task<IActionResult> createStudentProfile([FromForm] StudentsDTO studentsDTO)
@@ -43,7 +43,7 @@ namespace College2Career.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "student")]
         [HttpGet]
         [Route("getStudentProfileByUsersId")]
         public async Task<IActionResult> getStudentProfileByUsersId()
@@ -181,14 +181,15 @@ namespace College2Career.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "student")]
         [HttpPut]
-        [Route("updateStudentProfileByStudentId/{studentId}")]
-        public async Task<IActionResult> updateStudentProfileByStudentId(int studentId, [FromForm] StudentUpdateProfileDTO studentUpdateProfileDTO)
+        [Route("updateStudentProfileByStudentId")]
+        public async Task<IActionResult> updateStudentProfileByStudentId([FromForm] StudentUpdateProfileDTO studentUpdateProfileDTO)
         {
             try
             {
-                var result = await studentsService.updateStudentProfileByStudentId(studentUpdateProfileDTO, studentId);
+                var usersId = int.Parse(User.FindFirst("usersId")?.Value ?? "0");
+                var result = await studentsService.updateStudentProfileByStudentId(studentUpdateProfileDTO, usersId);
                 return Ok(result);
             }
             catch (Exception ex)

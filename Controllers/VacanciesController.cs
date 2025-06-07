@@ -18,7 +18,7 @@ namespace College2Career.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "company")]
         [HttpPost]
         [Route("createVacancies")]
         public async Task<IActionResult> createVacancies([FromForm] VacanciesDTO vacanciesDTO)
@@ -37,7 +37,7 @@ namespace College2Career.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "company")]
         [HttpGet]
         [Route("getVacanciesByCompanyId")]
         public async Task<IActionResult> getVacanciesByCompanyId()
@@ -55,7 +55,7 @@ namespace College2Career.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "company")]
         [HttpPut]
         [Route("updateCompanyVacanciesByVacancyId/{vacancyId}")]
         public async Task<IActionResult> updateCompanyVacanciesByVacancyId(int vacancyId, [FromBody] VacanciesDTO vacanciesDTO)
@@ -89,7 +89,8 @@ namespace College2Career.Controllers
             }
         }
 
-        [Authorize]
+
+        [Authorize(Roles = "company")]
         [HttpGet]
         [Route("getHiringVacanciesByCompanyId")]
         public async Task<IActionResult> getHiringVacanciesByCompanyId()
@@ -107,7 +108,7 @@ namespace College2Career.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "company")]
         [HttpGet]
         [Route("getHiredVacanciesByCompanyId")]
         public async Task<IActionResult> getHiredVacanciesByCompanyId()

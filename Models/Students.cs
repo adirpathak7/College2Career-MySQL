@@ -21,13 +21,13 @@ namespace College2Career.Models
         [Column("graduationYear", TypeName = "varchar(15)")]
         public string? graduationYear { get; set; }
 
-        [Column("resume", TypeName = "varchar(500)")]
+        [Column("resume", TypeName = "varchar(1000)")]
         public string? resume { get; set; }
 
         [Column("status", TypeName = "varchar(15)")]
         public string? status { get; set; } = "pending";
 
-        [Column("statusReason", TypeName = "varchar(255)")]
+        [Column("statusReason", TypeName = "varchar(1000)")]
         public string? statusReason { get; set; }
 
         [ForeignKey("usersId")]

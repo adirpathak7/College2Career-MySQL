@@ -13,5 +13,6 @@ namespace College2Career.Repository
         public Task<List<Companies>> getCompaniesByRejectedStatus();
         public Task<List<Companies>> getCompaniesByDeactivatedStatus();
         public Task<bool> getCompanyByActivatedStatus(int companyId);
+        public Task<Companies> getCompanyProfileByCompanyId(int companyId);
     }
 }

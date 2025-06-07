@@ -93,7 +93,7 @@ namespace College2Career.Service
 
                 var existStudent = await studentsRepository.getStudentsProfileByUsersId(usersId);
 
-                if (existStudent == null)
+                if (existStudent == null || existStudent.Users == null)
                 {
                     response.data = null;
                     response.message = "No student profile found.";
@@ -111,6 +111,7 @@ namespace College2Career.Service
                         resumeURL = existStudent.resume,
                         status = existStudent.status,
                         statusReason = existStudent.statusReason,
+                        email = existStudent.Users.email,
                         createdAt = existStudent.createdAt
                     };
                     response.data = new List<StudentsDTO> { studentDTO };
@@ -392,11 +393,23 @@ namespace College2Career.Service
             }
         }
 
-        public async Task<ServiceResponse<string>> updateStudentProfileByStudentId(StudentUpdateProfileDTO studentUpdateProfileDTO, int studentId)
+        public async Task<ServiceResponse<string>> updateStudentProfileByStudentId(StudentUpdateProfileDTO studentUpdateProfileDTO, int usersId)
         {
             try
             {
                 var response = new ServiceResponse<string>();
+
+                var existUser = await studentsRepository.getStudentsProfileByUsersId(usersId);
+
+                if (existUser == null)
+                {
+                    response.data = "0";
+                    response.message = "User not found.";
+                    response.status = false;
+                    return response;
+                }
+
+                var studentId = existUser.studentId;
 
                 var existStudent = await studentsRepository.getStudentProfileByStudentId(studentId);
 

@@ -9,7 +9,7 @@ namespace College2Career.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int feedbackId { get; set; }
 
-        [Column("comments", TypeName = "varchar(500)")]
+        [Column("comments", TypeName = "varchar(1000)")]
         public string? comments { get; set; }
 
         [Column("rating", TypeName = "varchar(10)")]

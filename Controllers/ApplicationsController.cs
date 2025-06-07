@@ -53,5 +53,22 @@ namespace College2Career.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
             }
         }
+
+        [Authorize(Roles = "company")]
+        [HttpPut]
+        [Route("updateApplicationsStatusByCompany/{applicationId}")]
+        public async Task<IActionResult> updateApplicationsStatusByCompany(int applicationId, [FromBody] UpdateApplicationStatusDTO updateApplicationStatusDTO)
+        {
+            try
+            {
+                var result = await applicationsService.updateApplicationsStatusByCompany(applicationId, updateApplicationStatusDTO);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in company controller in updateApplicationsStatusByCompany method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
     }
 }

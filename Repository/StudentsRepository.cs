@@ -30,7 +30,9 @@ namespace College2Career.Repository
         {
             try
             {
-                var existStudent = await c2CDBContext.Students.FirstOrDefaultAsync(c => c.usersId == usersId);
+                var existStudent = await c2CDBContext.Students
+                    .Include(u => u.Users)
+                    .FirstOrDefaultAsync(c => c.usersId == usersId);
                 return existStudent;
             }
             catch (Exception ex)

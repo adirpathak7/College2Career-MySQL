@@ -10,7 +10,7 @@
         public IFormFile? profilePicture { get; set; }
         public string? profilePictureURL { get; set; }
         public string? industry { get; set; }
-        public string? area { get; set; }
+        public string? address { get; set; }
         public string? city { get; set; }
         public string? state { get; set; }
         public string? employeeSize { get; set; }

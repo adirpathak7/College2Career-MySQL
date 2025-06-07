@@ -10,6 +10,7 @@ public interface IEmailService
     string createActivetedEmailBody(string name, int roleId);
     string createRejectedEmailBody(string name, string rejectReason, int roleId);
     string createDeactivatedEmailBody(string name, string deactivateReason, int roleId);
+    public string createApplicationStatusEmailBody(string studentName, string status, string companyName, string title, string reason = null);
 }
 
 public class EmailService : IEmailService
@@ -144,4 +145,47 @@ public class EmailService : IEmailService
     ";
         return body;
     }
+
+    public string createApplicationStatusEmailBody(string studentName, string status, string companyName, string title, string reason = null)
+    {
+        string statusMessage = "";
+
+        switch (status.ToLower())
+        {
+            case "rejected":
+                statusMessage = $@"
+                <p>We regret to inform you that your application for the position of <strong>{title}</strong> at <strong>{companyName}</strong> has been <strong>rejected</strong>.</p>
+                <p><strong>Reason:</strong> {reason}</p>";
+                break;
+
+            case "shortlisted":
+                statusMessage = $@"
+                <p>Good news! You have been <strong>shortlisted</strong> for the position of <strong>{title}</strong> at <strong>{companyName}</strong>.</p>
+                <p>The company will reach out to you soon for the next steps.</p>";
+                break;
+
+            case "interviewscheduled":
+                statusMessage = $@"
+                <p>You have been <strong>scheduled for an interview</strong> for the role of <strong>{title}</strong> at <strong>{companyName}</strong>.</p>
+                <p>Please check your email or dashboard for interview details.</p>";
+                break;
+
+            case "offered":
+                statusMessage = $@"
+                <p>Congratulations! You have received an <strong>offer</strong> for the position of <strong>{title}</strong> at <strong>{companyName}</strong>.</p>
+                <p>Check your profile for more details and next steps.</p>";
+                break;
+
+            default:
+                statusMessage = "<p>Status update received.</p>";
+                break;
+        }
+
+        return $@"
+        <p>Dear {studentName},</p>
+        {statusMessage}
+        <br/>
+        <p>Best Regards,<br/><b>Team College2Career</b></p>";
+    }
+
 }

@@ -9,13 +9,13 @@ namespace College2Career.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int offerId { get; set; }
 
-        [Column("offerLater", TypeName = "varchar(500)")]
+        [Column("offerLater", TypeName = "varchar(1000)")]
         public string? offerLater { get; set; }
 
         [Column("status", TypeName = "varchar(15)")]
         public string? status { get; set; } = "pending";
 
-        [Column("reason", TypeName = "varchar(255)")]
+        [Column("reason", TypeName = "varchar(1000)")]
         public string? reason { get; set; } = null;
 
         [ForeignKey("applicationId")]
@@ -23,7 +23,6 @@ namespace College2Career.Models
 
         [Column("createdAt")]
         public DateTime createdAt { get; set; } = DateTime.Now;
-
 
         // Navigation Properties
         public Applications? Applications { get; set; }

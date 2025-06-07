@@ -10,7 +10,7 @@ namespace College2Career.DTO
         public string eligibility_criteria { get; set; }
         public string totalVacancy { get; set; }
         public string? timing { get; set; }
-        public string package { get; set; }
+        public string annualPackage { get; set; }
         public string type { get; set; }
         public string locationType { get; set; }
         public string? status { get; set; }

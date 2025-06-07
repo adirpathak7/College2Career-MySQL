@@ -38,7 +38,7 @@ namespace College2Career.Service
                     eligibility_criteria = vacanciesDTO.eligibility_criteria,
                     totalVacancy = vacanciesDTO.totalVacancy,
                     timing = vacanciesDTO.timing,
-                    package = vacanciesDTO.package,
+                    annualPackage = vacanciesDTO.annualPackage,
                     type = vacanciesDTO.type,
                     locationType = vacanciesDTO.locationType,
                     companyId = existCompany.companyId
@@ -92,7 +92,7 @@ namespace College2Career.Service
                     eligibility_criteria = v.eligibility_criteria,
                     totalVacancy = v.totalVacancy,
                     timing = v.timing,
-                    package = v.package,
+                    annualPackage = v.annualPackage,
                     type = v.type,
                     locationType = v.locationType,
                     status = v.status,
@@ -148,7 +148,7 @@ namespace College2Career.Service
                 existVacancy.eligibility_criteria = vacanciesDTO.eligibility_criteria;
                 existVacancy.totalVacancy = vacanciesDTO.totalVacancy;
                 existVacancy.timing = vacanciesDTO.timing;
-                existVacancy.package = vacanciesDTO.package;
+                existVacancy.annualPackage = vacanciesDTO.annualPackage;
                 existVacancy.type = vacanciesDTO.type;
                 existVacancy.locationType = vacanciesDTO.locationType;
                 existVacancy.status = vacanciesDTO.status;
@@ -193,7 +193,7 @@ namespace College2Career.Service
                         companyId = v.companyId,
                         eligibility_criteria = v.eligibility_criteria,
                         locationType = v.locationType,
-                        package = v.package,
+                        annualPackage = v.annualPackage,
                         status = v.status,
                         totalVacancy = v.totalVacancy,
                         type = v.type,
@@ -206,7 +206,7 @@ namespace College2Career.Service
 
                     serviceResponse.data = vacanciesDTO;
                     serviceResponse.message = "All vacancies fetched.";
-                    serviceResponse.status = false;
+                    serviceResponse.status = true;
                 }
                 return serviceResponse;
             }
@@ -254,7 +254,7 @@ namespace College2Career.Service
                         eligibility_criteria = vh.eligibility_criteria,
                         totalVacancy = vh.totalVacancy,
                         timing = vh.timing,
-                        package = vh.package,
+                        annualPackage = vh.annualPackage,
                         type = vh.type,
                         locationType = vh.locationType,
                         status = vh.status,
@@ -310,7 +310,7 @@ namespace College2Career.Service
                         eligibility_criteria = vh.eligibility_criteria,
                         totalVacancy = vh.totalVacancy,
                         timing = vh.timing,
-                        package = vh.package,
+                        annualPackage = vh.annualPackage,
                         type = vh.type,
                         locationType = vh.locationType,
                         status = vh.status,
@@ -354,7 +354,7 @@ namespace College2Career.Service
                         companyId = v.companyId,
                         eligibility_criteria = v.eligibility_criteria,
                         locationType = v.locationType,
-                        package = v.package,
+                        annualPackage = v.annualPackage,
                         status = v.status,
                         totalVacancy = v.totalVacancy,
                         type = v.type,
@@ -367,7 +367,7 @@ namespace College2Career.Service
 
                     serviceResponse.data = vacanciesDTO;
                     serviceResponse.message = "Hiring vacancies fetched.";
-                    serviceResponse.status = false;
+                    serviceResponse.status = true;
                 }
                 return serviceResponse;
             }
@@ -403,7 +403,7 @@ namespace College2Career.Service
                         companyId = v.companyId,
                         eligibility_criteria = v.eligibility_criteria,
                         locationType = v.locationType,
-                        package = v.package,
+                        annualPackage = v.annualPackage,
                         status = v.status,
                         totalVacancy = v.totalVacancy,
                         type = v.type,
@@ -416,7 +416,7 @@ namespace College2Career.Service
 
                     serviceResponse.data = vacanciesDTO;
                     serviceResponse.message = "Hired vacancies fetched.";
-                    serviceResponse.status = false;
+                    serviceResponse.status = true;
                 }
                 return serviceResponse;
             }
@@ -474,7 +474,7 @@ namespace College2Career.Service
 
                 response.data = "1";
                 response.message = "Vacancy status updated successfully!";
-                response.status = false;
+                response.status = true;
 
                 return response;
             }

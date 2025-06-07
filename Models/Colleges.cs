@@ -9,7 +9,7 @@ namespace College2Career.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int collegeId { get; set; }
 
-        [Column("collegeName", TypeName = "varchar(50)")]
+        [Column("collegeName", TypeName = "varchar(200)")]
         public string? collegeName { get; set; }
 
         [Column("establishedDate", TypeName = "varchar(50)")]
@@ -18,11 +18,11 @@ namespace College2Career.Models
         [Column("contactNumber", TypeName = "varchar(50)")]
         public string? contactNumber { get; set; }
 
-        [Column("profilePicture", TypeName = "varchar(500)")]
+        [Column("profilePicture", TypeName = "varchar(1000)")]
         public string? profilePicture { get; set; }
 
-        [Column("area", TypeName = "varchar(50)")]
-        public string? area { get; set; }
+        [Column("address", TypeName = "varchar(350)")]
+        public string? address { get; set; }
 
         [Column("city", TypeName = "varchar(50)")]
         public string? city { get; set; }

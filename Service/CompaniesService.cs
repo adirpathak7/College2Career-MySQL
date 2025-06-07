@@ -60,7 +60,7 @@ namespace College2Career.Service
                     contactNumber = companiesDTO.contactNumber,
                     profilePicture = imageURL,
                     industry = companiesDTO.industry,
-                    area = companiesDTO.area,
+                    address = companiesDTO.address,
                     city = companiesDTO.city,
                     state = companiesDTO.state,
                     employeeSize = companiesDTO.employeeSize,
@@ -92,7 +92,7 @@ namespace College2Career.Service
                 {
                     response.data = new List<CompaniesDTO>();
                     response.message = "No company profile found.";
-                    response.status = true;
+                    response.status = false;
                 }
                 else
                 {
@@ -100,7 +100,7 @@ namespace College2Career.Service
                     {
                         companyId = existCompany.companyId,
                         companyName = existCompany.companyName,
-                        area = existCompany.area,
+                        address = existCompany.address,
                         city = existCompany.city,
                         state = existCompany.state,
                         establishedDate = existCompany.establishedDate,
@@ -197,7 +197,7 @@ namespace College2Career.Service
                         companyId = c.companyId,
                         companyName = c.companyName,
                         email = c.Users.email,
-                        area = c.area,
+                        address = c.address,
                         city = c.city,
                         state = c.state,
                         establishedDate = c.establishedDate,
@@ -244,7 +244,7 @@ namespace College2Career.Service
                         companyId = c.companyId,
                         companyName = c.companyName,
                         email = c.Users.email,
-                        area = c.area,
+                        address = c.address,
                         city = c.city,
                         state = c.state,
                         establishedDate = c.establishedDate,
@@ -292,7 +292,7 @@ namespace College2Career.Service
                         companyId = c.companyId,
                         companyName = c.companyName,
                         email = c.Users.email,
-                        area = c.area,
+                        address = c.address,
                         city = c.city,
                         state = c.state,
                         establishedDate = c.establishedDate,
@@ -340,7 +340,7 @@ namespace College2Career.Service
                         companyId = c.companyId,
                         companyName = c.companyName,
                         email = c.Users.email,
-                        area = c.area,
+                        address = c.address,
                         city = c.city,
                         state = c.state,
                         establishedDate = c.establishedDate,
@@ -388,7 +388,7 @@ namespace College2Career.Service
                         companyId = c.companyId,
                         companyName = c.companyName,
                         email = c.Users.email,
-                        area = c.area,
+                        address = c.address,
                         city = c.city,
                         state = c.state,
                         establishedDate = c.establishedDate,

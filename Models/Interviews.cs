@@ -18,24 +18,22 @@ namespace College2Career.Models
         [Column("status", TypeName = "varchar(15)")]
         public string? interviewStatus { get; set; } = "pending";
 
+        [Column("reason", TypeName = "varchar(1000)")]
+        public string? reason { get; set; } = null;
+
         [ForeignKey("applicationId")]
         public int? applicationId { get; set; }
-
-        [ForeignKey("collegeId")]
-        public int? collegeId { get; set; }
 
         [Column("createdAt")]
         public DateTime createdAt { get; set; } = DateTime.Now;
 
+        [Column("updatedAt")]
+        public DateTime updatedAt { get; set; } = DateTime.Now;
 
         // Navigation Properties
         [ForeignKey("applicationId")]
         [InverseProperty("Interviews")]
         public Applications? Applications { get; set; }
-
-        [ForeignKey("collegeId")]
-        [InverseProperty("Interviews")]
-        public Colleges? Colleges { get; set; }
     }
 
     //public enum interviewStatus

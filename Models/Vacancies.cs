@@ -12,10 +12,10 @@ namespace College2Career.Models
         [Column("title", TypeName = "varchar(50)")]
         public string? title { get; set; }
 
-        [Column("description", TypeName = "varchar(500)")]
+        [Column("description", TypeName = "varchar(3000)")]
         public string? description { get; set; }
 
-        [Column("eligibility_criteria", TypeName = "varchar(200)")]
+        [Column("eligibility_criteria", TypeName = "varchar(3000)")]
         public string? eligibility_criteria { get; set; }
 
         [Column("totalVacancy", TypeName = "varchar(10)")]
@@ -24,8 +24,8 @@ namespace College2Career.Models
         [Column("timing", TypeName = "varchar(50)")]
         public string? timing { get; set; } = null;
 
-        [Column("package", TypeName = "varchar(50)")]
-        public string? package { get; set; }
+        [Column("annualPackage", TypeName = "varchar(50)")]
+        public string? annualPackage { get; set; }
 
         [Column("type", TypeName = "varchar(15)")]
         public string? type { get; set; }
@@ -39,9 +39,13 @@ namespace College2Career.Models
         [Column("createdAt")]
         public DateTime createdAt { get; set; } = DateTime.Now;
 
+        [Column("updatedAt")]
+        public DateTime updatedAt { get; set; } = DateTime.Now;
+
         [ForeignKey("Companies")]
         [Column("companyId")]
         public int? companyId { get; set; }
+
 
         // Navigation Properties
         public Companies? Companies { get; set; }

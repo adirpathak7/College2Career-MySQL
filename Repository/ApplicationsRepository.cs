@@ -25,7 +25,7 @@ namespace College2Career.Repository
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in ApplicationsRepository in alreadyAppliedForVacancy method: " + ex.Message);
+                Console.WriteLine("ERROR in applications repository in alreadyAppliedForVacancy method: " + ex.Message);
                 throw;
             }
         }
@@ -34,13 +34,13 @@ namespace College2Career.Repository
         {
             try
             {
-                var checkApplication = await c2CDBContext.Applications.Where(a=> a.status == "offerAccepted").ToListAsync();
+                var checkApplication = await c2CDBContext.Applications.Where(a => a.status == "offerAccepted").ToListAsync();
                 if (checkApplication == null || checkApplication.Count == 0) return false;
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in ApplicationsRepository in isOfferAccepted method: " + ex.Message);
+                Console.WriteLine("ERROR in applications repository in isOfferAccepted method: " + ex.Message);
                 throw;
             }
         }
@@ -54,7 +54,7 @@ namespace College2Career.Repository
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in ApplicationsRepository in newApplications method: " + ex.Message);
+                Console.WriteLine("ERROR in applications repository in newApplications method: " + ex.Message);
                 throw;
             }
         }
@@ -76,7 +76,34 @@ namespace College2Career.Repository
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR in ApplicationsRepository in getAllAppliedApplications method: " + ex.Message);
+                Console.WriteLine("ERROR in applications repository in getAllAppliedApplications method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<Applications> isApplicationsExist(int applicationId)
+        {
+            try
+            {
+                var checkApplication = await c2CDBContext.Applications.FindAsync(applicationId);
+                return checkApplication;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in applications repository in isApplicationsExist method: " + ex.Message);
+                throw;
+            }
+        }
+        public async Task updateApplicationsStatusByCompany(Applications applications)
+        {
+            try
+            {
+                c2CDBContext.Applications.Update(applications);
+                await c2CDBContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in applications repository in updateApplicationsStatusByCompany method: " + ex.Message);
                 throw;
             }
         }

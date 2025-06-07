@@ -13,6 +13,6 @@ namespace College2Career.Service
         Task<ServiceResponse<List<StudentsDTO>>> getStudentsByActivatedStatus();
         Task<ServiceResponse<List<StudentsDTO>>> getStudentsByRejectedStatus();
         Task<ServiceResponse<List<StudentsDTO>>> getStudentsByDeactivatedStatus();
-        Task<ServiceResponse<string>> updateStudentProfileByStudentId(StudentUpdateProfileDTO studentUpdateProfileDTO, int studentId);
+        Task<ServiceResponse<string>> updateStudentProfileByStudentId(StudentUpdateProfileDTO studentUpdateProfileDTO, int usersId);
     }
 }

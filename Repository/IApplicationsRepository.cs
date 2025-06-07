@@ -1,4 +1,5 @@
-﻿using College2Career.DTO;
+﻿using System;
+using College2Career.DTO;
 using College2Career.Models;
 
 namespace College2Career.Repository
@@ -9,5 +10,7 @@ namespace College2Career.Repository
         Task<bool> isOfferAccepted(int studentId);
         Task newApplications(Applications applications);
         Task<List<Applications>> getAllAppliedApplicationsByCompanyId(int companyId);
+        Task<Applications> isApplicationsExist(int applicationId);
+        Task updateApplicationsStatusByCompany(Applications applications);
     }
 }

@@ -30,7 +30,7 @@ namespace College2Career.Service
                     establishedDate = collegesDTO.establishedDate,
                     contactNumber = collegesDTO.contactNumber,
                     profilePicture = imageURL,
-                    area = collegesDTO.area,
+                    address = collegesDTO.address,
                     city = collegesDTO.city,
                     state = collegesDTO.state
                 };

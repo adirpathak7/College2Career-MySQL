@@ -19,5 +19,6 @@
         public string totalVacancy { get; set; }
         public string locationType { get; set; }
         public string vacancyStatus { get; set; }
+        public DateTime? updatedAt { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace College2Career.Models
         [Column("password", TypeName = "varchar(255)")]
         public string? password { get; set; }
 
-        [Column("forgotPasswordToken", TypeName = "varchar(255)")]
+        [Column("forgotPasswordToken", TypeName = "varchar(500)")]
         public string? forgotPasswordToken { get; set; } = null;
 
         [Column("tokenExpirationTime")]

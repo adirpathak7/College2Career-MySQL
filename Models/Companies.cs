@@ -18,14 +18,14 @@ namespace College2Career.Models
         [Column("contactNumber", TypeName = "varchar(50)")]
         public string? contactNumber { get; set; }
 
-        [Column("profilePicture", TypeName = "varchar(500)")]
+        [Column("profilePicture", TypeName = "varchar(1000)")]
         public string? profilePicture { get; set; }
 
         [Column("industry", TypeName = "varchar(50)")]
         public string? industry { get; set; }
 
-        [Column("area", TypeName = "varchar(50)")]
-        public string? area { get; set; }
+        [Column("address", TypeName = "varchar(350)")]
+        public string? address { get; set; }
 
         [Column("city", TypeName = "varchar(50)")]
         public string? city { get; set; }
@@ -36,7 +36,7 @@ namespace College2Career.Models
         [Column("employeeSize", TypeName = "varchar(10)")]
         public string? employeeSize { get; set; }
 
-        [Column("reasonOfStatus", TypeName = "varchar(100)")]
+        [Column("reasonOfStatus", TypeName = "varchar(1000)")]
         public string? reasonOfStatus { get; set; } = null;
 
         [Column("status", TypeName = "varchar(20)")]

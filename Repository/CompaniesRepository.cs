@@ -149,5 +149,19 @@ namespace College2Career.Repository
                 throw;
             }
         }
+
+        public async Task<Companies> getCompanyProfileByCompanyId(int companyId)
+        {
+            try
+            {
+                var existCompany = await c2CDBContext.Companies.Include(u => u.Users).FirstOrDefaultAsync(c => c.companyId == companyId);
+                return existCompany;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR occured in company repository in getCompanyProfileByCompanyId method: " + ex.Message);
+                throw;
+            }
+        }
     }
 }

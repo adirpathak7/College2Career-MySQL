@@ -7,15 +7,19 @@ namespace College2Career.Service
 {
     public class ApplicationsService : IApplicationsService
     {
+        private readonly IEmailService emailService;
         private readonly IApplicationsRepository applicationsRepository;
         private readonly IStudentsRepository studentsRepository;
         private readonly ICompaniesRepository companiesRepository;
+        private readonly IVacanciesRepository vacanciesRepository;
 
-        public ApplicationsService(IApplicationsRepository applicationsRepository, IStudentsRepository studentsRepository, ICompaniesRepository companiesRepository)
+        public ApplicationsService(IEmailService emailService, IApplicationsRepository applicationsRepository, IStudentsRepository studentsRepository, ICompaniesRepository companiesRepository, IVacanciesRepository vacanciesRepository)
         {
+            this.emailService = emailService;
             this.applicationsRepository = applicationsRepository;
             this.studentsRepository = studentsRepository;
             this.companiesRepository = companiesRepository;
+            this.vacanciesRepository = vacanciesRepository;
         }
 
         public async Task<ServiceResponse<string>> newApplications(ApplicationsDTO applicationsDTO, int usersId)
@@ -83,7 +87,7 @@ namespace College2Career.Service
 
                 var existCompany = await companiesRepository.getCompanyProfileByUsersId(usersId);
 
-                Console.WriteLine("existCompany data:- " + existCompany.companyId + "  " + existCompany.companyName);
+                //Console.WriteLine("existCompany data:- " + existCompany.companyId + "  " + existCompany.companyName);
                 if (existCompany == null || existCompany.status != "activated")
                 {
                     response.data = null;
@@ -94,7 +98,7 @@ namespace College2Career.Service
 
                 var companyId = existCompany.companyId;
 
-                Console.WriteLine("companyId in controller:- " + companyId);
+                //Console.WriteLine("companyId in controller:- " + companyId);
 
                 var allApplications = await applicationsRepository.getAllAppliedApplicationsByCompanyId(companyId);
 
@@ -116,7 +120,8 @@ namespace College2Career.Service
                     eligibility_criteria = a.Vacancies?.eligibility_criteria,
                     totalVacancy = a.Vacancies?.totalVacancy,
                     locationType = a.Vacancies?.locationType,
-                    vacancyStatus = a.Vacancies?.status
+                    vacancyStatus = a.Vacancies?.status,
+                    updatedAt = a.updatedAt
                 }).ToList();
 
                 response.data = dataOfAppliedStudents;
@@ -128,6 +133,72 @@ namespace College2Career.Service
             catch (Exception ex)
             {
                 Console.WriteLine("ERROR in ApplicationsService in getAllAppliedApplicationsByVacancyId method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<ServiceResponse<string>> updateApplicationsStatusByCompany(int applicationId, UpdateApplicationStatusDTO updateApplicationStatusDTO)
+        {
+            try
+            {
+                var response = new ServiceResponse<string>();
+
+                var isApplicationExist = await applicationsRepository.isApplicationsExist(applicationId);
+
+                if (isApplicationExist == null)
+                {
+                    response.data = null;
+                    response.message = "Application does not exist.";
+                    response.status = false;
+                    return response;
+                }
+
+                var validStatuses = new[] { "rejected", "shortlisted", "interviewScheduled", "offered" };
+                if (!validStatuses.Contains(updateApplicationStatusDTO.status))
+                {
+                    response.data = null;
+                    response.message = "Invalid status.";
+                    response.status = false;
+                    return response;
+                }
+
+                if (updateApplicationStatusDTO.status.ToLower() == "rejected" && string.IsNullOrWhiteSpace(updateApplicationStatusDTO.reason))
+                {
+                    response.data = null;
+                    response.message = "Reason is required when status is rejected.";
+                    response.status = false;
+                    return response;
+                }
+
+                isApplicationExist.status = updateApplicationStatusDTO.status;
+                isApplicationExist.reason = updateApplicationStatusDTO.reason;
+                isApplicationExist.updatedAt = DateTime.Now;
+
+                await applicationsRepository.updateApplicationsStatusByCompany(isApplicationExist);
+
+                var student = await studentsRepository.getStudentProfileByStudentId((int)isApplicationExist.studentId);
+                var vacancy = await vacanciesRepository.getVacancyByVacancyId((int)isApplicationExist.vacancyId);
+                var company = await companiesRepository.getCompanyProfileByCompanyId((int)vacancy.companyId);
+
+                string emailBody = emailService.createApplicationStatusEmailBody(
+                studentName: student.studentName,
+                status: updateApplicationStatusDTO.status,
+                companyName: company.companyName,
+                title: vacancy.title,
+                reason: updateApplicationStatusDTO.status.ToLower() == "rejected" ? updateApplicationStatusDTO.reason : null
+                );
+
+                await emailService.sendEmail(student.Users.email, "Update on your application status", emailBody);
+
+                response.data = "1";
+                response.message = "Application status updated successfully.";
+                response.status = true;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in ApplicationsService in updateApplicationsStatusToShortlisted method: " + ex.Message);
                 throw;
             }
         }

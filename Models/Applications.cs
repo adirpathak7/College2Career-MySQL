@@ -9,14 +9,17 @@ namespace College2Career.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int applicationId { get; set; }
 
-        [Column("reason", TypeName = "varchar(300)")]
+        [Column("reason", TypeName = "varchar(1000)")]
         public string? reason { get; set; } = null;
 
-        [Column("status", TypeName = "varchar(15)")]
+        [Column("status", TypeName = "varchar(25)")]
         public string? status { get; set; } = "applied";
 
         [Column("createdAt")]
         public DateTime createdAt { get; set; } = DateTime.Now;
+
+        [Column("updatedAt")]
+        public DateTime? updatedAt { get; set; } = DateTime.Now;
 
         [ForeignKey("Students")]
         [Column("studentId")]
@@ -36,9 +39,9 @@ namespace College2Career.Models
 
     //public enum applicationStatus
     //{
-    //    applied,
-    //    rejected,
-    //    verified,
+    //    applied (by student),
+    //    rejected (by company),
+    //    shortlisted (by company),
     //    interviewScheduled,
     //    offered,
     //    offerAccepted,

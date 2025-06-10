@@ -185,7 +185,7 @@ namespace College2Career.Service
                 status: updateApplicationStatusDTO.status,
                 companyName: company.companyName,
                 title: vacancy.title,
-                reason: updateApplicationStatusDTO.status.ToLower() == "rejected" ? updateApplicationStatusDTO.reason : null
+                reason: updateApplicationStatusDTO.status.ToLower() == "rejected" ? updateApplicationStatusDTO.reason : ""
                 );
 
                 await emailService.sendEmail(student.Users.email, "Update on your application status", emailBody);

@@ -27,6 +27,7 @@ builder.Services.AddScoped<ICollegesRepository, CollegesRepository>();
 builder.Services.AddScoped<IStudentsRepository, StudentsRepository>();
 builder.Services.AddScoped<IVacanciesRepository, VacanciesRepository>();
 builder.Services.AddScoped<IApplicationsRepository, ApplicationsRepository>();
+builder.Services.AddScoped<IInterviewsRepository, InterviewsRepository>();
 
 // Registered Services
 builder.Services.AddScoped<IUsersService, UsersService>();
@@ -35,6 +36,7 @@ builder.Services.AddScoped<ICollegesService, CollegesService>();
 builder.Services.AddScoped<IStudentsService, StudentsService>();
 builder.Services.AddScoped<IVacanciesService, VacanciesService>();
 builder.Services.AddScoped<IApplicationsService, ApplicationsService>();
+builder.Services.AddScoped<IInterviewsService, InterviewsService>();
 
 // Registered Helper Services
 builder.Services.AddSingleton<IJWTService, JWTService>();

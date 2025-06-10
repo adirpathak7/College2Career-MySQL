@@ -33,7 +33,7 @@ namespace College2Career.Models
         // Navigation Properties
         public Students? Students { get; set; }
         public Vacancies? Vacancies { get; set; }
-        public Interviews? Interviews { get; set; }
+        public ICollection<Interviews>? Interviews { get; set; }
         public Offers? Offers { get; set; }
     }
 

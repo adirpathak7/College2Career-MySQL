@@ -35,7 +35,7 @@ namespace College2Career.Models
 
 
         // Navigation Properties
-        public ICollection<Interviews>? Interviews { get; set; }
+        //public ICollection<Interviews>? Interviews { get; set; }
         public ICollection<Placements>? Placements { get; set; }
         public ICollection<Feedbacks>? Feedbacks { get; set; }
     }

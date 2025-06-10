@@ -16,7 +16,7 @@ namespace College2Career.Models
         public string? interviewTime { get; set; }
 
         [Column("status", TypeName = "varchar(15)")]
-        public string? interviewStatus { get; set; } = "pending";
+        public string? interviewStatus { get; set; } = "scheduled";
 
         [Column("reason", TypeName = "varchar(1000)")]
         public string? reason { get; set; } = null;
@@ -28,7 +28,7 @@ namespace College2Career.Models
         public DateTime createdAt { get; set; } = DateTime.Now;
 
         [Column("updatedAt")]
-        public DateTime updatedAt { get; set; } = DateTime.Now;
+        public DateTime updatedAt { get; set; }
 
         // Navigation Properties
         [ForeignKey("applicationId")]
@@ -38,9 +38,9 @@ namespace College2Career.Models
 
     //public enum interviewStatus
     //{
-    //    pending,
     //    scheduled,
+    //    rescheduled,
     //    completed,
     //    cancelled
-    //}
+    //} by default interviewStatus will scheduled company can cancelled it rescheduled
 }

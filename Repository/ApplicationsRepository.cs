@@ -107,5 +107,24 @@ namespace College2Career.Repository
                 throw;
             }
         }
+
+        public async Task<List<Applications>> getAllAppliedApplicationsByStudentId(int studentId)
+        {
+            try
+            {
+                var allApplications = await c2CDBContext.Applications
+                    .Include(a => a.Vacancies)
+                    .Include(a => a.Vacancies.Companies)
+                    .Include(a => a.Vacancies.Companies.Users)
+                    .Where(a => a.studentId == studentId)
+                    .ToListAsync();
+                return allApplications;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in applications repository in getAllAppliedApplicationsByStudentId method: " + ex.Message);
+                throw;
+            }
+        }
     }
 }

@@ -202,5 +202,67 @@ namespace College2Career.Service
                 throw;
             }
         }
+
+        public async Task<ServiceResponse<List<StudentsApplicationsDataDTO>>> getAllAppliedApplicationsByStudentId(int usersId)
+        {
+            try
+            {
+                var response = new ServiceResponse<List<StudentsApplicationsDataDTO>>();
+
+                var existStudent = await studentsRepository.getStudentsProfileByUsersId(usersId);
+
+                if (existStudent == null)
+                {
+                    response.data = null;
+                    response.message = "Student not found for the user.";
+                    response.status = false;
+                    return response;
+                }
+
+                var studentId = existStudent.studentId;
+
+                var allApplications = await applicationsRepository.getAllAppliedApplicationsByStudentId(studentId);
+                if (allApplications == null)
+                {
+                    response.data = null;
+                    response.message = "No applications found for the student.";
+                    response.status = false;
+                    return response;
+                }
+
+                var dataOfAppliedVacancies = allApplications.Select(a => new StudentsApplicationsDataDTO
+                {
+                    status = a.status,
+                    reason = a.reason,
+                    appliedDate = a.createdAt,
+                    companyName = a.Vacancies?.Companies?.companyName,
+                    email = a.Vacancies?.Companies?.Users?.email,
+                    companyPicture = a.Vacancies?.Companies?.profilePicture,
+                    contactNumber = a.Vacancies?.Companies?.contactNumber,
+                    industry = a.Vacancies?.Companies?.industry,
+                    address = a.Vacancies?.Companies?.address,
+                    city = a.Vacancies?.Companies?.city,
+                    state = a.Vacancies?.Companies?.state,
+                    title = a.Vacancies?.title,
+                    type = a.Vacancies?.type,
+                    vacancyPostedDate = a.Vacancies?.createdAt,
+                    annualPackage = a.Vacancies?.annualPackage,
+                    locationType = a.Vacancies?.locationType,
+                    description = a.Vacancies?.description,
+                    eligibility_criteria = a.Vacancies?.eligibility_criteria,
+                }).ToList();
+
+                response.data = dataOfAppliedVacancies;
+                response.message = "All applied applications by student retrieved successfully.";
+                response.status = true;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in ApplicationsService in getAllAppliedApplicationsByStudentId method: " + ex.Message);
+                throw;
+            }
+        }
     }
 }

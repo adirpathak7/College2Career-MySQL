@@ -11,6 +11,7 @@ public interface IEmailService
     string createRejectedEmailBody(string name, string rejectReason, int roleId);
     string createDeactivatedEmailBody(string name, string deactivateReason, int roleId);
     public string createApplicationStatusEmailBody(string studentName, string status, string companyName, string title, string reason = null);
+    string createInterviewStatusEmailBody(string studentName, string status, string companyName, string title, string dateTime, string reason = null);
 }
 
 public class EmailService : IEmailService
@@ -186,6 +187,37 @@ public class EmailService : IEmailService
         {statusMessage}
         <br/>
         <p>Best Regards,<br/><b>Team College2Career</b></p>";
+    }
+
+    public string createInterviewStatusEmailBody(string studentName, string status, string companyName, string title, string dateTime, string reason = null)
+    {
+        string statusMessage = "";
+
+        switch (status.ToLower())
+        {
+            case "rescheduled":
+                statusMessage = $@"
+                <p>Your interview for the position of <strong>{title}</strong> at <strong>{companyName}</strong> has been <strong>rescheduled</strong>.</p>
+                <p><strong>New Schedule:</strong> {dateTime}</p>
+                <p><strong>Reason:</strong> {reason}</p>";
+                break;
+
+            case "cancelled":
+                statusMessage = $@"
+                <p>We regret to inform you that your interview for the position of <strong>{title}</strong> at <strong>{companyName}</strong> has been <strong>cancelled</strong>.</p>
+                <p><strong>Reason:</strong> {reason}</p>";
+                break;
+
+            default:
+                statusMessage = "<p>Interview update received.</p>";
+                break;
+        }
+
+        return $@"
+    <p>Dear {studentName},</p>
+    {statusMessage}
+    <br/>
+    <p>Best Regards,<br/><b>Team College2Career</b></p>";
     }
 
 }

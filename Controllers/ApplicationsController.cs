@@ -43,7 +43,6 @@ namespace College2Career.Controllers
             try
             {
                 var usersId = int.Parse(User.FindFirst("usersId").Value ?? "0");
-                //Console.WriteLine("usersId in controller:- " + usersId);
                 var result = await applicationsService.getAllAppliedApplicationsByCompanyId(usersId);
                 return Ok(result);
             }
@@ -67,6 +66,24 @@ namespace College2Career.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine("ERROR in company controller in updateApplicationsStatusByCompany method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
+        [Authorize(Roles = "student")]
+        [HttpGet]
+        [Route("getAllAppliedApplicationsByStudentId")]
+        public async Task<IActionResult> getAllAppliedApplicationsByStudentId()
+        {
+            try
+            {
+                var usersId = int.Parse(User.FindFirst("usersId").Value ?? "0");
+                var result = await applicationsService.getAllAppliedApplicationsByStudentId(usersId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in company controller in getAllAppliedApplicationsByStudentId method: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
             }
         }

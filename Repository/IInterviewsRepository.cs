@@ -4,7 +4,11 @@ namespace College2Career.Repository
 {
     public interface IInterviewsRepository
     {
-        public Task<Interviews> getApplicationById(int applicationId);
-        public Task interviewSchedule(Interviews interviews);
+        Task<Interviews> getApplicationById(int applicationId);
+        Task interviewSchedule(Interviews interviews);
+        Task<List<Interviews>> getAllInterviewsByCompanyId(int companyId);
+        Task<Interviews> getInterviewsByInterviewId(int interviewId);
+        Task<Interviews> rescheduledInterview(Interviews interviews);
+        Task<Interviews> cancelledInterview(Interviews interviews);
     }
 }

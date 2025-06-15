@@ -9,7 +9,22 @@ namespace College2Career.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int offerId { get; set; }
 
-        [Column("offerLetter", TypeName = "varchar(1000)")]
+        [Column("annualPackage", TypeName = "varchar(25)")]
+        public string? annualPackage { get; set; }
+
+        [Column("joiningDate", TypeName = "varchar(20)")]
+        public string? joiningDate { get; set; }
+
+        [Column("timing", TypeName = "varchar(50)")]
+        public string? timing { get; set; }
+
+        [Column("position", TypeName = "varchar(50)")]
+        public string? position { get; set; }
+
+        [Column("description", TypeName = "varchar(2000)")]
+        public string? description { get; set; }
+
+        [Column("offerLetter", TypeName = "varchar(4000)")]
         public string? offerLetter { get; set; }
 
         [Column("status", TypeName = "varchar(15)")]
@@ -28,20 +43,11 @@ namespace College2Career.Models
         public Applications? Applications { get; set; }
     }
 
-        //[Column("salary", TypeName = "varchar(100)")]
-        //public string? salary { get; set; }
-
-        //[Column("joiningDate")]
-        //public DateTime? joiningDate { get; set; }
-
-        //[Column("position", TypeName = "varchar(100)")]
-        //public string? position { get; set; }
-
-
-        //public enum offerStatus
-        //{
-        //    pending,
-        //    accepted,
-        //    rejected
-        //}
-    }
+    
+    //public enum offerStatus
+    //{
+    //    pending,
+    //    accepted,
+    //    rejected
+    //}
+}

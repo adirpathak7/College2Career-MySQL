@@ -42,5 +42,5 @@ namespace College2Career.Models
     //    rescheduled,
     //    completed,
     //    cancelled
-    //} by default interviewStatus will scheduled company can cancelled it rescheduled
+    //}
 }

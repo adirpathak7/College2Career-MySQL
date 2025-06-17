@@ -102,5 +102,75 @@ namespace College2Career.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
             }
         }
+
+        [Authorize(Roles = "company")]
+        [HttpPut]
+        [Route("completedInterview/{interviewId}")]
+        public async Task<IActionResult> completedInterview([FromForm] AllInterviewsDTO allInterviewsDTO, int interviewId)
+        {
+            try
+            {
+                var result = await interviewsService.completedInterview(allInterviewsDTO, interviewId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in InterviewsController in completedInterview method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
+        [Authorize(Roles = "company")]
+        [HttpPut]
+        [Route("offeredInterview/{interviewId}")]
+        public async Task<IActionResult> offeredInterview(int interviewId)
+        {
+            try
+            {
+                var result = await interviewsService.offeredInterview(interviewId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in InterviewsController in offeredInterview method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
+        [Authorize(Roles = "company")]
+        [HttpGet]
+        [Route("getAllScheduledInterviewsByCompanyId")]
+        public async Task<IActionResult> getAllScheduledInterviewsByCompanyId()
+        {
+            try
+            {
+                var usersId = int.Parse(User.FindFirst("usersId").Value ?? "0");
+                var result = await interviewsService.getAllScheduledInterviewsByCompanyId(usersId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in InterviewsController in getAllScheduledInterviewsByCompanyId method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
+        [Authorize(Roles = "company")]
+        [HttpGet]
+        [Route("getAllCompletedInterviewsByCompanyId")]
+        public async Task<IActionResult> getAllCompletedInterviewsByCompanyId()
+        {
+            try
+            {
+                var usersId = int.Parse(User.FindFirst("usersId").Value ?? "0");
+                var result = await interviewsService.getAllCompletedInterviewsByCompanyId(usersId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in InterviewsController in getAllCompletedInterviewsByCompanyId method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
     }
 }

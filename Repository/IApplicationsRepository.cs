@@ -13,5 +13,6 @@ namespace College2Career.Repository
         Task<Applications> isApplicationsExist(int applicationId);
         Task updateApplicationsStatusByCompany(Applications applications);
         Task<List<Applications>> getAllAppliedApplicationsByStudentId(int studentId);
+        Task<Applications> getApplicationDetailsById(int applicationId);
     }
 }

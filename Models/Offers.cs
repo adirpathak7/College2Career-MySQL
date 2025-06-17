@@ -22,7 +22,7 @@ namespace College2Career.Models
         public string? position { get; set; }
 
         [Column("description", TypeName = "varchar(2000)")]
-        public string? description { get; set; }
+        public string? description { get; set; } = null;
 
         [Column("offerLetter", TypeName = "varchar(4000)")]
         public string? offerLetter { get; set; }

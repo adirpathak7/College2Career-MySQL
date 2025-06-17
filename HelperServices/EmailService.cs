@@ -1,5 +1,7 @@
 ﻿using System.Net;
 using System.Net.Mail;
+using System.Runtime.InteropServices.Marshalling;
+using Microsoft.AspNetCore.SignalR.Protocol;
 
 
 public interface IEmailService
@@ -12,6 +14,7 @@ public interface IEmailService
     string createDeactivatedEmailBody(string name, string deactivateReason, int roleId);
     public string createApplicationStatusEmailBody(string studentName, string status, string companyName, string title, string reason = null);
     string createInterviewStatusEmailBody(string studentName, string status, string companyName, string title, string dateTime, string reason = null);
+    string createOfferLetterEmailBody(string studentName, string position, string companyName, string annualPackage, string joiningDate, string timing, string description, string offerLetterUrl);
 }
 
 public class EmailService : IEmailService
@@ -218,6 +221,27 @@ public class EmailService : IEmailService
     {statusMessage}
     <br/>
     <p>Best Regards,<br/><b>Team College2Career</b></p>";
+    }
+
+    public string createOfferLetterEmailBody(string studentName, string position, string companyName, string annualPackage, string joiningDate, string timing, string description, string offerLetterUrl)
+    {
+        return $@"
+    <p>Dear {studentName},</p>
+
+    <p>We are pleased to offer you the position of <strong>{position}</strong> at <strong>{companyName}</strong>.</p>
+    
+    <p>Your annual compensation package will be <strong>{annualPackage}</strong>.</p>
+    
+    <p><strong>Joining Date:</strong> {joiningDate}</p>
+    <p><strong>Working Hours:</strong> {timing}</p>
+
+    {(string.IsNullOrWhiteSpace(description) ? "" : $"<p><strong>Additional Notes:</strong><br/>{description}</p>")}
+
+    <p>You can download your official offer letter from the following link:<br/>
+    <a href='{offerLetterUrl}' target='_blank'>Download Offer Letter (PDF)</a></p>
+
+    <br/>
+    <p>Sincerely,<br/><strong>{companyName} HR Team</strong></p>";
     }
 
 }

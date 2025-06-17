@@ -41,6 +41,7 @@ namespace College2Career.Models
     //    scheduled,
     //    rescheduled,
     //    completed,
-    //    cancelled
+    //    cancelled,
+    //    offered
     //}
 }

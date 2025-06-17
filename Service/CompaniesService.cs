@@ -30,7 +30,7 @@ namespace College2Career.Service
                 if (imageURL == null)
                 {
                     response.data = "0";
-                    response.message = "Image upload failed.";
+                    response.message = "Image upload failed!";
                     response.status = false;
                     return response;
                 }
@@ -38,7 +38,7 @@ namespace College2Career.Service
                 if (usersId == 0)
                 {
                     response.data = "0";
-                    response.message = "Unauthorized! Please login again. ";
+                    response.message = "Unauthorized! Please login again!";
                     response.status = false;
                 }
 

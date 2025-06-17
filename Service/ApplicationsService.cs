@@ -232,6 +232,7 @@ namespace College2Career.Service
 
                 var dataOfAppliedVacancies = allApplications.Select(a => new StudentsApplicationsDataDTO
                 {
+                    applicationId = a.applicationId,
                     status = a.status,
                     reason = a.reason,
                     appliedDate = a.createdAt,

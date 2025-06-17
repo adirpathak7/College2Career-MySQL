@@ -10,12 +10,13 @@ namespace College2Career.Service
         private readonly IInterviewsRepository interviewsRepository;
         private readonly ICompaniesRepository companiesRepository;
         private readonly IEmailService emailService;
-
-        public InterviewsService(IInterviewsRepository interviewsRepository, ICompaniesRepository companiesRepository, IEmailService emailService)
+        private readonly IUsersRepository usersRepository;
+        public InterviewsService(IInterviewsRepository interviewsRepository, ICompaniesRepository companiesRepository, IEmailService emailService, IUsersRepository usersRepository)
         {
             this.interviewsRepository = interviewsRepository;
             this.companiesRepository = companiesRepository;
             this.emailService = emailService;
+            this.usersRepository = usersRepository;
         }
 
         public async Task<ServiceResponse<string>> interviewSchedule(InterviewsDTO interviewsDTO, int usersId)
@@ -35,7 +36,7 @@ namespace College2Career.Service
                 }
 
                 var existingApplicationIdForInterview = await interviewsRepository.getApplicationById((int)interviewsDTO.applicationId);
-                Console.WriteLine(existingApplicationIdForInterview.applicationId);
+                //Console.WriteLine(existingApplicationIdForInterview.applicationId);
                 if (existingApplicationIdForInterview != null)
                 {
                     response.data = "0";
@@ -82,7 +83,7 @@ namespace College2Career.Service
                 }
 
                 var interviews = await interviewsRepository.getAllInterviewsByCompanyId(existCompany.companyId);
-                if (interviews == null || interviews.Count == 0)
+                if (interviews == null)
                 {
                     response.data = null;
                     response.message = "No interviews found for the company.";
@@ -135,7 +136,7 @@ namespace College2Career.Service
                     return response;
                 }
 
-                var interviews = await interviewsRepository.getAllInterviewsByCompanyId(companyId);
+                var interviews = await interviewsRepository.getAllInterviewsByCompanyIdToAdmin(companyId);
                 if (interviews == null || interviews.Count == 0)
                 {
                     response.data = null;
@@ -264,6 +265,174 @@ namespace College2Career.Service
             catch (Exception ex)
             {
                 Console.WriteLine("ERROR in InterviewsService in cancelledInterview method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<ServiceResponse<string>> completedInterview(AllInterviewsDTO allInterviewsDTO, int interviewId)
+        {
+            try
+            {
+                var response = new ServiceResponse<string>();
+                var existingInterview = await interviewsRepository.getInterviewsByInterviewId(interviewId);
+                if (existingInterview == null)
+                {
+                    response.data = "0";
+                    response.message = "Interview not found!";
+                    response.status = false;
+                    return response;
+                }
+
+                existingInterview.interviewStatus = "completed";
+                existingInterview.updatedAt = DateTime.Now;
+
+                await interviewsRepository.completedInterview(existingInterview);
+
+                response.data = "1";
+                response.message = "Interview completed successfully.";
+                response.status = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in InterviewsService in completedInterview method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<ServiceResponse<string>> offeredInterview(int interviewId)
+        {
+            try
+            {
+                var response = new ServiceResponse<string>();
+                var existingInterview = await interviewsRepository.getInterviewsByInterviewId(interviewId);
+                if (existingInterview == null)
+                {
+                    response.data = "0";
+                    response.message = "Interview not found!";
+                    response.status = false;
+                    return response;
+                }
+
+                existingInterview.interviewStatus = "offered";
+                existingInterview.updatedAt = DateTime.Now;
+
+                await interviewsRepository.offeredInterview(existingInterview);
+
+                response.data = "1";
+                response.message = "Interview offered successfully.";
+                response.status = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in InterviewsService in offeredInterview method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<ServiceResponse<List<AllInterviewsDTO>>> getAllScheduledInterviewsByCompanyId(int usersId)
+        {
+            try
+            {
+                var response = new ServiceResponse<List<AllInterviewsDTO>>();
+
+                var existUser = await companiesRepository.getCompanyProfileByUsersId(usersId);
+                if (existUser == null)
+                {
+                    response.data = null;
+                    response.message = "Company not found for the user.";
+                    response.status = false;
+                    return response;
+                }
+
+                var interviews = await interviewsRepository.getAllScheduledInterviewsByCompanyId(existUser.companyId);
+                if (interviews == null || interviews.Count == 0)
+                {
+                    response.data = null;
+                    response.message = "No scheduled interviews found for the company.";
+                    response.status = false;
+                    return response;
+                }
+                var allInterviewsDTO = interviews.Select(i => new AllInterviewsDTO
+                {
+                    interviewId = i.interviewId,
+                    applicationId = i.applicationId,
+                    interviewDate = i.interviewDate,
+                    interviewTime = i.interviewTime,
+                    interviewStatus = i.interviewStatus,
+                    reason = i.reason,
+                    createdAt = i.createdAt,
+                    updatedAt = i.updatedAt,
+                    studentName = i.Applications.Students.studentName,
+                    email = i.Applications.Students.Users.email,
+                    vacancyTitle = i.Applications.Vacancies.title,
+                    annualPackage = i.Applications.Vacancies.annualPackage,
+                    companyName = existUser.companyName
+                }).ToList();
+
+                response.data = allInterviewsDTO;
+                response.message = "Scheduled interviews retrieved successfully.";
+                response.status = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in InterviewsService in getAllScheduledInterviewsByCompanyId method: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<ServiceResponse<List<AllInterviewsDTO>>> getAllCompletedInterviewsByCompanyId(int usersId)
+        {
+            try
+            {
+                var response = new ServiceResponse<List<AllInterviewsDTO>>();
+
+                var existUser = await companiesRepository.getCompanyProfileByUsersId(usersId);
+                if (existUser == null)
+                {
+                    response.data = null;
+                    response.message = "Company not found for the user.";
+                    response.status = false;
+                    return response;
+                }
+
+                var interviews = await interviewsRepository.getAllCompletedInterviewsByCompanyId(existUser.companyId);
+                if (interviews == null)
+                {
+                    response.data = null;
+                    response.message = "No completed interviews found for the company.";
+                    response.status = false;
+                    return response;
+                }
+
+                var allInterviewsDTO = interviews.Select(i => new AllInterviewsDTO
+                {
+                    interviewId = i.interviewId,
+                    applicationId = i.applicationId,
+                    interviewDate = i.interviewDate,
+                    interviewTime = i.interviewTime,
+                    interviewStatus = i.interviewStatus,
+                    reason = i.reason,
+                    createdAt = i.createdAt,
+                    updatedAt = i.updatedAt,
+                    studentName = i.Applications.Students.studentName,
+                    email = i.Applications.Students.Users.email,
+                    vacancyTitle = i.Applications.Vacancies.title,
+                    annualPackage = i.Applications.Vacancies.annualPackage,
+                    companyName = existUser.companyName
+                }).ToList();
+
+                response.data = allInterviewsDTO;
+                response.message = "Completed interviews retrieved successfully.";
+                response.status = true;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in InterviewsService in getAllCompletedInterviewsByCompanyId method: " + ex.Message);
                 throw;
             }
         }

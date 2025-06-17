@@ -126,5 +126,22 @@ namespace College2Career.Repository
                 throw;
             }
         }
+
+        public async Task<Applications> getApplicationDetailsById(int applicationId)
+        {
+            try
+            {
+                var existApplication = await c2CDBContext.Applications
+                .Include(a => a.Students)
+                    .ThenInclude(s => s.Users)
+                .FirstOrDefaultAsync(a => a.applicationId == applicationId);
+                return existApplication;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in applications repository in getAllAppliedApplicationsByStudentId method: " + ex.Message);
+                throw;
+            }
+        }
     }
 }

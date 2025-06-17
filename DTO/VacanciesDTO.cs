@@ -13,6 +13,7 @@ namespace College2Career.DTO
         public string annualPackage { get; set; }
         public string type { get; set; }
         public string locationType { get; set; }
+        public DateTime createdAt { get; set; }
         public string? status { get; set; }
         public int? companyId { get; set; }
 

@@ -258,7 +258,8 @@ namespace College2Career.Service
                         type = vh.type,
                         locationType = vh.locationType,
                         status = vh.status,
-                        companyId = vh.companyId
+                        companyId = vh.companyId,
+                        createdAt = vh.createdAt,
                     }).ToList();
                     response.data = vacanciesDTO;
                     response.message = "Hiring vacancies fetched successfully.";

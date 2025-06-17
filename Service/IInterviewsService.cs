@@ -11,5 +11,9 @@ namespace College2Career.Service
         Task<ServiceResponse<List<AllInterviewsDTO>>> getAllInterviewsByCompanyIdToAdmin(int companyId);
         Task<ServiceResponse<string>> rescheduledInterview(AllInterviewsDTO allInterviewsDTO, int interviewId);
         Task<ServiceResponse<string>> cancelledInterview(AllInterviewsDTO allInterviewsDTO, int interviewId);
+        Task<ServiceResponse<string>> completedInterview(AllInterviewsDTO allInterviewsDTO, int interviewId);
+        Task<ServiceResponse<string>> offeredInterview(int interviewId);
+        Task<ServiceResponse<List<AllInterviewsDTO>>> getAllScheduledInterviewsByCompanyId(int usersId);
+        Task<ServiceResponse<List<AllInterviewsDTO>>> getAllCompletedInterviewsByCompanyId(int usersId);
     }
 }

@@ -6,7 +6,7 @@
         public string interviewTime { get; set; }
         public string? interviewStatus { get; set; }
         public string? reason { get; set; }
-        public int? applicationId { get; set; }
+        public int applicationId { get; set; }
         public DateTime updatedAt { get; set; }
 
     }

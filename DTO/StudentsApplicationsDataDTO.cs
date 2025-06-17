@@ -2,6 +2,7 @@
 {
     public class StudentsApplicationsDataDTO
     {
+        public int? applicationId { get; set; }
         public string? status { get; set; }
         public string? reason { get; set; }
         public DateTime? appliedDate { get; set; }

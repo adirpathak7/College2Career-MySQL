@@ -14,5 +14,8 @@ namespace College2Career.Repository
         Task updateApplicationsStatusByCompany(Applications applications);
         Task<List<Applications>> getAllAppliedApplicationsByStudentId(int studentId);
         Task<Applications> getApplicationDetailsById(int applicationId);
+        Task<Applications> updateStatusToOfferedByStudentId(int studentId);
+        Task<Applications> updateStatusToOfferAcceptedStudentId(int applicationId);
+        Task<Applications> updateStatusToOfferRejectedStudentId(int applicationId, ApplicationsDTO applicationsDTO);
     }
 }

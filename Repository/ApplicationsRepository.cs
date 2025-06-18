@@ -143,5 +143,39 @@ namespace College2Career.Repository
                 throw;
             }
         }
+
+        public async Task<Applications> updateStatusToOfferedByStudentId(int applicationId)
+        {
+            var existApplication = await c2CDBContext.Applications.FindAsync(applicationId);
+            if (existApplication == null) return null;
+
+            existApplication.status = "offered";
+            c2CDBContext.Applications.Update(existApplication);
+            await c2CDBContext.SaveChangesAsync();
+            return existApplication;
+        }
+
+        public async Task<Applications> updateStatusToOfferAcceptedStudentId(int applicationId)
+        {
+            var existApplication = await c2CDBContext.Applications.FindAsync(applicationId);
+            if (existApplication == null) return null;
+
+            existApplication.status = "offerAccepted";
+            c2CDBContext.Applications.Update(existApplication);
+            await c2CDBContext.SaveChangesAsync();
+            return existApplication;
+        }
+
+        public async Task<Applications> updateStatusToOfferRejectedStudentId(int applicationId, ApplicationsDTO applicationsDTO)
+        {
+            var existApplication = await c2CDBContext.Applications.FindAsync(applicationId);
+            if (existApplication == null) return null;
+
+            existApplication.status = "offerRejected";
+            existApplication.reason = applicationsDTO.reason;
+            c2CDBContext.Applications.Update(existApplication);
+            await c2CDBContext.SaveChangesAsync();
+            return existApplication;
+        }
     }
 }

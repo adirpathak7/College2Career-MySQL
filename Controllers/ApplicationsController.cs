@@ -87,5 +87,56 @@ namespace College2Career.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
             }
         }
+
+        [Authorize(Roles = "student")]
+        [HttpPut]
+        [Route("updateStatusToOfferedByStudentId/{applicationId}")]
+        public async Task<IActionResult> updateStatusToOfferedByStudentId(int applicationId)
+        {
+            try
+            {
+                var result = await applicationsService.updateStatusToOfferedByStudentId(applicationId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in company controller in updateStatusToOfferedByStudentId method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
+        [Authorize(Roles = "student")]
+        [HttpPut]
+        [Route("updateStatusToOfferAcceptedStudentId/{applicationId}")]
+        public async Task<IActionResult> updateStatusToOfferAcceptedStudentId(int applicationId)
+        {
+            try
+            {
+                var result = await applicationsService.updateStatusToOfferAcceptedStudentId(applicationId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in company controller in updateStatusToOfferAcceptedStudentId method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
+        [Authorize(Roles = "student")]
+        [HttpPut]
+        [Route("updateStatusToOfferRejectedStudentId/{applicationId}")]
+        public async Task<IActionResult> updateStatusToOfferRejectedStudentId(int applicationId, [FromForm] ApplicationsDTO applicationsDTO)
+        {
+            try
+            {
+                var result = await applicationsService.updateStatusToOfferRejectedStudentId(applicationId, applicationsDTO);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in company controller in updateStatusToOfferRejectedStudentId method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
     }
 }

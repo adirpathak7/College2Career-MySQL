@@ -2,6 +2,7 @@
 {
     public class OffersDTO
     {
+        public int? offerId { get; set; }
         public string? annualPackage { get; set; }
         public string? joiningDate { get; set; }
         public string? timing { get; set; }

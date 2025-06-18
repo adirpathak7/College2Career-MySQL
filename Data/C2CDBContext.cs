@@ -9,6 +9,11 @@ namespace College2Career.Data
         {
 
         }
+
+        public C2CDBContext()
+        {
+            
+        }
         public DbSet<Roles> Roles { get; set; } 
         public DbSet<Users> Users { get; set; }
         public DbSet<Colleges> Colleges { get; set; }

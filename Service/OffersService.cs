@@ -12,13 +12,15 @@ namespace College2Career.Service
         private readonly ICompaniesRepository companiesRepository;
         private readonly ICloudinaryService cloudinaryService;
         private readonly IApplicationsRepository applicationsRepository;
-        public OffersService(IOffersRepository offersRepository, IEmailService emailService, ICompaniesRepository companiesRepository, ICloudinaryService cloudinaryService, IApplicationsRepository applicationsRepository)
+        private readonly IStudentsRepository studentsRepository;
+        public OffersService(IOffersRepository offersRepository, IEmailService emailService, ICompaniesRepository companiesRepository, ICloudinaryService cloudinaryService, IApplicationsRepository applicationsRepository, IStudentsRepository studentsRepository)
         {
             this.offersRepository = offersRepository;
             this.emailService = emailService;
             this.companiesRepository = companiesRepository;
             this.cloudinaryService = cloudinaryService;
             this.applicationsRepository = applicationsRepository;
+            this.studentsRepository = studentsRepository;
         }
 
         public async Task<ServiceResponse<string>> newOffers(OffersDTO offersDTO, int usersId)
@@ -130,5 +132,116 @@ namespace College2Career.Service
             }
         }
 
+        public async Task<ServiceResponse<Offers>> updateOfferStatusAccepted(int offerId, OffersDTO offersDTO)
+        {
+            try
+            {
+                var response = new ServiceResponse<Offers>();
+                var offer = await offersRepository.updateOfferStatusAccepted(offerId, offersDTO);
+                if (offer == null)
+                {
+                    response.data = null;
+                    response.message = "Offer not found.";
+                    response.status = false;
+                    return response;
+                }
+                offer.status = "accepted";
+
+                await offersRepository.updateOfferStatusAccepted(offer.offerId, offersDTO);
+
+                response.data = offer;
+                response.message = "Offer status updated to accepted.";
+                response.status = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in OffersService in method updateOfferStatusAccepted: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<ServiceResponse<Offers>> updateOfferStatusRejected(int offerId, OffersDTO offersDTO)
+        {
+            try
+            {
+                var response = new ServiceResponse<Offers>();
+                var offer = await offersRepository.updateOfferStatusRejected(offerId, offersDTO);
+                if (offer == null)
+                {
+                    response.data = null;
+                    response.message = "Offer not found.";
+                    response.status = false;
+                    return response;
+                }
+                offer.status = "rejected";
+                offer.reason = offersDTO.reason;
+
+                await offersRepository.updateOfferStatusRejected(offer.offerId,offersDTO);
+
+                response.data = offer;
+                response.message = "Offer status updated to rejected.";
+                response.status = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in OffersService in method updateOfferStatusRejected: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<ServiceResponse<List<OffersDTO>>> getAllOffersByStudentId(int studentdId)
+        {
+            try
+            {
+                var response = new ServiceResponse<List<OffersDTO>>();
+                var offer = await studentsRepository.getStudentsProfileByUsersId(studentdId);
+                if (offer == null)
+                {
+                    response.data = null;
+                    response.message = "Offer not found.";
+                    response.status = false;
+                    return response;
+                }
+                var offers = await offersRepository.getAllOffersByStudentId(offer.studentId);
+
+                if (offers == null || offers.Count == 0)
+                {
+                    response.data = null;
+                    response.message = "No offers found for this student.";
+                    response.status = false;
+                    return response;
+                }
+
+                var allOffers = offers.Select(o => new OffersDTO
+                {
+                    offerId = o.offerId,
+                    applicationId = o.applicationId,
+                    annualPackage = o.annualPackage,
+                    joiningDate = o.joiningDate,
+                    timing = o.timing,
+                    position = o.position,
+                    description = o.description,
+                    offerLetterURL = o.offerLetter,
+                    companyName = o.Applications?.Vacancies?.Companies?.companyName,
+                    createdAt = o.createdAt,
+                    //reason = o.reason,
+                    //studentName = o.Applications?.Students?.studentName,
+                    //status = o.status,
+                }).ToList();
+
+
+                response.data = allOffers;
+                response.message = "Offer details retrieved successfully.";
+                response.status = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in OffersService in method getOfferDetailsById: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

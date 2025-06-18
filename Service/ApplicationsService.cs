@@ -1,4 +1,5 @@
-﻿using College2Career.DTO;
+﻿using System.Xml.Schema;
+using College2Career.DTO;
 using College2Career.HelperServices;
 using College2Career.Models;
 using College2Career.Repository;
@@ -265,5 +266,97 @@ namespace College2Career.Service
                 throw;
             }
         }
+
+        public async Task<ServiceResponse<ApplicationsDTO>> updateStatusToOfferedByStudentId(int applicationId)
+        {
+            var response = new ServiceResponse<ApplicationsDTO>();
+
+            var app = await applicationsRepository.getApplicationDetailsById(applicationId);
+            if (app == null)
+            {
+                response.status = false;
+                response.message = "Application does not exist.";
+                return response;
+            }
+
+            var updatedApp = await applicationsRepository.updateStatusToOfferedByStudentId(applicationId);
+            if (updatedApp == null)
+            {
+                response.status = false;
+                response.message = "Failed to update.";
+                return response;
+            }
+
+            var dto = new ApplicationsDTO
+            {
+                status = updatedApp.status
+            };
+
+            response.data = dto;
+            response.status = true;
+            response.message = "Application status updated to 'offered' successfully.";
+            return response;
+        }
+
+        public async Task<ServiceResponse<ApplicationsDTO>> updateStatusToOfferAcceptedStudentId(int applicationId)
+        {
+            var response = new ServiceResponse<ApplicationsDTO>();
+
+            var app = await applicationsRepository.getApplicationDetailsById(applicationId);
+            if (app == null)
+            {
+                response.status = false;
+                response.message = "Application does not exist.";
+                return response;
+            }
+
+            var updatedApp = await applicationsRepository.updateStatusToOfferAcceptedStudentId(applicationId);
+            if (updatedApp == null)
+            {
+                response.status = false;
+                response.message = "Failed to update.";
+                return response;
+            }
+
+            response.data = new ApplicationsDTO
+            {
+                status = updatedApp.status
+            };
+            response.status = true;
+            response.message = "Application status updated to 'offerAccepted' successfully.";
+            return response;
+        }
+
+        public async Task<ServiceResponse<ApplicationsDTO>> updateStatusToOfferRejectedStudentId(int applicationId, ApplicationsDTO applicationsDTO)
+        {
+            var response = new ServiceResponse<ApplicationsDTO>();
+
+            var app = await applicationsRepository.getApplicationDetailsById(applicationId);
+            if (app == null)
+            {
+                response.status = false;
+                response.message = "Application does not exist.";
+                return response;
+            }
+
+            var updatedApp = await applicationsRepository.updateStatusToOfferRejectedStudentId(applicationId, applicationsDTO);
+            if (updatedApp == null)
+            {
+                response.status = false;
+                response.message = "Failed to update.";
+                return response;
+            }
+
+            response.data = new ApplicationsDTO
+            {
+                status = updatedApp.status,
+                reason = updatedApp.reason
+            };
+            response.status = true;
+            response.message = "Application status updated to 'offerRejected' successfully.";
+            return response;
+        }
+
+
     }
 }

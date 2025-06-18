@@ -34,5 +34,59 @@ namespace College2Career.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
             }
         }
+
+        [Authorize(Roles = "student")]
+        [HttpPut]
+        [Route("updateOfferStatusAccepted/{offerId}")]
+        public async Task<IActionResult> updateOfferStatusAccepted(int offerId, [FromForm] OffersDTO offersDTO)
+        {
+            try
+            {
+                var usersId = int.Parse(User.FindFirst(u => u.Type == "usersId")?.Value);
+                var result = await offersService.updateOfferStatusAccepted(offerId, offersDTO);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in OffersController in updateOfferStatusAccepted method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
+
+        [Authorize(Roles = "student")]
+        [HttpPut]
+        [Route("updateOfferStatusRejected/{offerId}")]
+        public async Task<IActionResult> updateOfferStatusRejected(int offerId, OffersDTO offersDTO)
+        {
+            try
+            {
+                var usersId = int.Parse(User.FindFirst(u => u.Type == "usersId")?.Value);
+                var result = await offersService.updateOfferStatusRejected(offerId, offersDTO);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in OffersController in updateOfferStatusRejected method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
+
+        [Authorize(Roles = "student")]
+        [HttpGet]
+        [Route("getAllOffersByStudentId")]
+        public async Task<IActionResult> getAllOffersByStudentId()
+        {
+            try
+            {
+                var usersId = int.Parse(User.FindFirst(u => u.Type == "usersId")?.Value);
+                var result = await offersService.getAllOffersByStudentId(usersId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in OffersController in getAllOffersByStudentId method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
     }
 }

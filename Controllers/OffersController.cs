@@ -79,6 +79,7 @@ namespace College2Career.Controllers
             try
             {
                 var usersId = int.Parse(User.FindFirst(u => u.Type == "usersId")?.Value);
+                Console.WriteLine("in controller for getAllOffersByStudentId: " + usersId);
                 var result = await offersService.getAllOffersByStudentId(usersId);
                 return Ok(result);
             }

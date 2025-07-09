@@ -1,7 +1,9 @@
-﻿using College2Career.DTO;
+﻿using College2Career.Data;
+using College2Career.DTO;
 using College2Career.HelperServices;
 using College2Career.Models;
 using College2Career.Repository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 
 namespace College2Career.Service
@@ -11,12 +13,15 @@ namespace College2Career.Service
         private readonly ICompaniesRepository companiesRepository;
         private readonly ICloudinaryService cloudinaryService;
         private readonly IEmailService emailService;
+        private readonly C2CDBContext c2CDBContext;
 
-        public CompaniesService(ICompaniesRepository companiesRepository, ICloudinaryService cloudinaryService, IEmailService emailService)
+        
+        public CompaniesService(ICompaniesRepository companiesRepository, ICloudinaryService cloudinaryService, IEmailService emailService, C2CDBContext c2CDBContext)
         {
             this.companiesRepository = companiesRepository;
             this.cloudinaryService = cloudinaryService;
             this.emailService = emailService;
+            this.c2CDBContext = c2CDBContext;
         }
 
         public async Task<ServiceResponse<string>> createCompanyProfile(CompaniesDTO companiesDTO, int usersId)
@@ -414,5 +419,28 @@ namespace College2Career.Service
                 throw;
             }
         }
+
+        public async Task<CompanyDashboardStatsDTO> getCompanyDashboardStats(int usersId)
+        {
+            var company = await c2CDBContext.Companies.FirstOrDefaultAsync(c => c.usersId == usersId);
+            if (company == null) return null;
+
+            var companyId = company.companyId;
+
+            var stats = new CompanyDashboardStatsDTO
+            {
+                totalVacancies = await c2CDBContext.Vacancies.CountAsync(v => v.companyId == companyId),
+                hiringVacancies = await c2CDBContext.Vacancies.CountAsync(v => v.companyId == companyId && v.status == "hiring"),
+                hiredVacancies = await c2CDBContext.Vacancies.CountAsync(v => v.companyId == companyId && v.status == "hired"),
+                interviewScheduledApplications = await c2CDBContext.Applications.CountAsync(a => a.Vacancies.companyId == companyId && a.status == "interviewScheduled"),
+                offeredApplications = await c2CDBContext.Applications.CountAsync(a => a.Vacancies.companyId == companyId && a.status == "offered"),
+                offerAcceptedApplications = await c2CDBContext.Applications.CountAsync(a => a.Vacancies.companyId == companyId && a.status == "offerAccepted"),
+                completedInterviews = await c2CDBContext.Interviews.CountAsync(i => i.Applications.Vacancies.companyId == companyId && i.interviewStatus == "completed"),
+                offeredInterviews = await c2CDBContext.Interviews.CountAsync(i => i.Applications.Vacancies.companyId == companyId && i.interviewStatus == "offered"),
+            };
+
+            return stats;
+        }
+
     }
 }

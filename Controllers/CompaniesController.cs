@@ -183,5 +183,24 @@ namespace College2Career.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
             }
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("getCompanyDashboardStats")]
+        public async Task<IActionResult> getCompanyDashboardStats()
+        {
+            try
+            {
+                var extractedUserId = int.Parse(User.FindFirst("usersId")?.Value ?? "0");
+                var result = await companiesService.getCompanyDashboardStats(extractedUserId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in company controller in getCompanyDashboardStats method: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
     }
 }

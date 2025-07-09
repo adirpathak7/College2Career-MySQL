@@ -14,11 +14,11 @@ namespace College2Career.Repository
         }
 
 
-        public async Task<bool> alreadyAppliedForVacancy(int studentId, int vacancyId)
+        public async Task<bool> alreadyAppliedForVacancy(int studentId)
         {
             try
             {
-                var checkApplication = await c2CDBContext.Applications.FirstOrDefaultAsync(a => a.studentId == studentId && a.vacancyId == vacancyId);
+                var checkApplication = await c2CDBContext.Applications.FirstOrDefaultAsync(a => a.studentId == studentId);
 
                 if (checkApplication == null) return false;
                 else return true;

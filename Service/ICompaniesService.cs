@@ -13,5 +13,7 @@ namespace College2Career.Service
         Task<ServiceResponse<List<CompaniesDTO>>> getCompaniesByActivatedStatus();
         Task<ServiceResponse<List<CompaniesDTO>>> getCompaniesByRejectedStatus();
         Task<ServiceResponse<List<CompaniesDTO>>> getCompaniesByDeactivatedStatus();
+        Task<CompanyDashboardStatsDTO> getCompanyDashboardStats(int usersId);
+
     }
 }

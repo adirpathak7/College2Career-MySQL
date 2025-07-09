@@ -40,25 +40,26 @@ namespace College2Career.Service
                 }
 
                 var studentId = existStudent.studentId;
+                Console.WriteLine("in controller for getAllOffersByStudentId: " + studentId);
 
-                var applicationIsExist = await applicationsRepository.alreadyAppliedForVacancy(studentId, (int)applicationsDTO.vacancyId);
+                var applicationIsExist = await applicationsRepository.alreadyAppliedForVacancy(studentId);
 
-                if (applicationIsExist)
-                {
-                    response.data = "0";
-                    response.message = "You have already applied for this vacancy.";
-                    response.status = false;
-                    return response;
-                }
+                //if (applicationIsExist)
+                //{
+                //    response.data = "0";
+                //    response.message = "You have already applied for this vacancy.";
+                //    response.status = false;
+                //    return response;
+                //}
 
-                var isOfferAccepted = await applicationsRepository.isOfferAccepted(studentId);
-                if (isOfferAccepted)
-                {
-                    response.data = "0";
-                    response.message = "You have already accepted an offer. You cannot apply for another vacancy.";
-                    response.status = false;
-                    return response;
-                }
+                //var isOfferAccepted = await applicationsRepository.isOfferAccepted(studentId);
+                //if (isOfferAccepted)
+                //{
+                //    response.data = "0";
+                //    response.message = "You have already accepted an offer. You cannot apply for another vacancy.";
+                //    response.status = false;
+                //    return response;
+                //}
                 var studentApplication = new Applications
                 {
                     studentId = studentId,

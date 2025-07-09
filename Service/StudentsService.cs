@@ -1,7 +1,9 @@
-﻿using College2Career.DTO;
+﻿using College2Career.Data;
+using College2Career.DTO;
 using College2Career.HelperServices;
 using College2Career.Models;
 using College2Career.Repository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 
 namespace College2Career.Service
@@ -11,12 +13,14 @@ namespace College2Career.Service
         private readonly IStudentsRepository studentsRepository;
         private readonly ICloudinaryService cloudinaryService;
         private readonly IEmailService emailService;
+        private readonly C2CDBContext c2CDBContext;
 
-        public StudentsService(IStudentsRepository studentsRepository, ICloudinaryService cloudinaryService, IEmailService emailService)
+        public StudentsService(IStudentsRepository studentsRepository, ICloudinaryService cloudinaryService, IEmailService emailService, C2CDBContext c2CDBContext)
         {
             this.studentsRepository = studentsRepository;
             this.cloudinaryService = cloudinaryService;
             this.emailService = emailService;
+            this.c2CDBContext = c2CDBContext;
         }
 
         public async Task<ServiceResponse<string>> createStudentProfile(StudentsDTO studentsDTO, int usersId)
@@ -447,6 +451,55 @@ namespace College2Career.Service
                 Console.WriteLine("ERROR in student service in updateStudentProfileByStudentId method: " + ex.Message);
                 throw;
             }
+        }
+
+
+        public async Task<object> getStudentDashboardStats(int usersId)
+        {
+            var student = await c2CDBContext.Students
+                .Where(s => s.usersId == usersId).FirstOrDefaultAsync();
+
+            if (student == null)
+                return null;
+
+            var studentId = student.studentId;
+
+            var totalCompanies = await c2CDBContext.Companies
+                .Where(c => c.status == "activated")
+                .CountAsync();
+
+            var totalApplications = await c2CDBContext.Applications
+                .Where(a => a.studentId == studentId)
+                .CountAsync();
+
+            var shortlistedApplications = await c2CDBContext.Applications
+                .Where(a => a.studentId == studentId && a.status == "shortlisted")
+                .CountAsync();
+
+            var interviewScheduledApplications = await c2CDBContext.Applications
+                .Where(a => a.studentId == studentId && a.status == "interviewScheduled")
+                .CountAsync();
+
+            var offeredApplications = await c2CDBContext.Applications
+                .Where(a => a.studentId == studentId && a.status == "offered")
+                .CountAsync();
+
+            var totalOffers = await c2CDBContext.Applications
+                .Where(a => a.studentId == studentId && a.status == "offerAccepted")
+                .CountAsync();
+
+            var interviewsScheduled = interviewScheduledApplications;
+
+            return new
+            {
+                totalCompanies,
+                totalOffers,
+                interviewsScheduled,
+                totalApplications,
+                shortlistedApplications,
+                interviewScheduledApplications,
+                offeredApplications
+            };
         }
 
 

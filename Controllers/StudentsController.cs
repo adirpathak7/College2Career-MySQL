@@ -198,5 +198,30 @@ namespace College2Career.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error", error = ex.Message });
             }
         }
+
+        [Authorize(Roles = "student")]
+        [HttpGet]
+        [Route("getStudentDashboardStats")]
+        public async Task<IActionResult> getStudentDashboardStats()
+        {
+            try
+            {
+                var usersId = int.Parse(User.FindFirst("usersId")?.Value ?? "0");
+                var result = await studentsService.getStudentDashboardStats(usersId);
+
+                if (result == null)
+                {
+                    return NotFound(new { status = false, message = "Student not found" });
+                }
+
+                return Ok(new { status = true, message = "dashboard stats fetched", data = result });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR in getStudentDashboardStats: " + ex.Message);
+                return StatusCode(500, new { status = false, message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
     }
 }

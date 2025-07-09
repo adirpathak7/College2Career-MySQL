@@ -34,7 +34,7 @@ namespace College2Career.Models
         public string? locationType { get; set; }
 
         [Column("status", TypeName = "varchar(15)")]
-        public string? status { get; set; } = "pending";
+        public string? status { get; set; } = "hiring";
 
         [Column("createdAt")]
         public DateTime createdAt { get; set; } = DateTime.Now;

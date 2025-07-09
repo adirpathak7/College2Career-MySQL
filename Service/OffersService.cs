@@ -204,7 +204,10 @@ namespace College2Career.Service
                     response.status = false;
                     return response;
                 }
-                var offers = await offersRepository.getAllOffersByStudentId(offer.studentId);
+                var studentId = offer.studentId;
+                Console.WriteLine("in service for getAllOffersByStudentId: " + studentId);
+
+                var offers = await offersRepository.getAllOffersByStudentId(studentId);
 
                 if (offers == null || offers.Count == 0)
                 {

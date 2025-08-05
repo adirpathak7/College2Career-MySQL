@@ -12,9 +12,9 @@ namespace College2Career.Data
 
         public C2CDBContext()
         {
-            
+
         }
-        public DbSet<Roles> Roles { get; set; } 
+        public DbSet<Roles> Roles { get; set; }
         public DbSet<Users> Users { get; set; }
         public DbSet<Colleges> Colleges { get; set; }
         public DbSet<Companies> Companies { get; set; }
@@ -28,6 +28,13 @@ namespace College2Career.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Explicitly add data for Roles
+            modelBuilder.Entity<Roles>()
+                .HasData(
+                    new Roles { roleId = 1, role = "student" },
+                    new Roles { roleId = 2, role = "company" }
+                );
+
             // Explicitly define the one-to-one relationship between Student and Users
             modelBuilder.Entity<Students>()
                .HasOne(s => s.Users)   // Students has one User

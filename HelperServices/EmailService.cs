@@ -1,7 +1,5 @@
 ﻿using System.Net;
 using System.Net.Mail;
-using System.Runtime.InteropServices.Marshalling;
-using Microsoft.AspNetCore.SignalR.Protocol;
 
 
 public interface IEmailService

@@ -12,7 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Register DbContext with SQL Server
 builder.Services.AddDbContext<C2CDBContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("College2CareerConnectionString"));
+    options.UseMySql(builder.Configuration.GetConnectionString("College2CareerConnectionString"),
+        new MySqlServerVersion(new Version(8, 0, 33)));
 });
 
 builder.WebHost.ConfigureKestrel(serverOptions =>

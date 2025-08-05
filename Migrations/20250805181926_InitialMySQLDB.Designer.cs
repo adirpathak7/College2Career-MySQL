@@ -3,7 +3,6 @@ using System;
 using College2Career.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -12,18 +11,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace College2Career.Migrations
 {
     [DbContext(typeof(C2CDBContext))]
-    [Migration("20250610054109_InitialChangeInTbl")]
-    partial class InitialChangeInTbl
+    [Migration("20250805181926_InitialMySQLDB")]
+    partial class InitialMySQLDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("College2Career.Models.Applications", b =>
                 {
@@ -31,10 +28,8 @@ namespace College2Career.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("applicationId"));
-
                     b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("createdAt");
 
                     b.Property<string>("reason")
@@ -50,7 +45,7 @@ namespace College2Career.Migrations
                         .HasColumnName("studentId");
 
                     b.Property<DateTime?>("updatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("updatedAt");
 
                     b.Property<int?>("vacancyId")
@@ -72,8 +67,6 @@ namespace College2Career.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("collegeId"));
-
                     b.Property<string>("address")
                         .HasColumnType("varchar(350)")
                         .HasColumnName("address");
@@ -91,7 +84,7 @@ namespace College2Career.Migrations
                         .HasColumnName("contactNumber");
 
                     b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("createdAt");
 
                     b.Property<string>("establishedDate")
@@ -117,8 +110,6 @@ namespace College2Career.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("companyId"));
-
                     b.Property<string>("address")
                         .HasColumnType("varchar(350)")
                         .HasColumnName("address");
@@ -136,7 +127,7 @@ namespace College2Career.Migrations
                         .HasColumnName("contactNumber");
 
                     b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("createdAt");
 
                     b.Property<string>("employeeSize")
@@ -173,8 +164,7 @@ namespace College2Career.Migrations
                     b.HasKey("companyId");
 
                     b.HasIndex("usersId")
-                        .IsUnique()
-                        .HasFilter("[usersId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Companies");
                 });
@@ -184,8 +174,6 @@ namespace College2Career.Migrations
                     b.Property<int>("feedbackId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("feedbackId"));
 
                     b.Property<int?>("collegeId")
                         .HasColumnType("int");
@@ -198,7 +186,7 @@ namespace College2Career.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("createdAt");
 
                     b.Property<string>("rating")
@@ -225,16 +213,11 @@ namespace College2Career.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("interviewId"));
-
-                    b.Property<int?>("CollegescollegeId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("applicationId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("createdAt");
 
                     b.Property<string>("interviewDate")
@@ -254,12 +237,10 @@ namespace College2Career.Migrations
                         .HasColumnName("reason");
 
                     b.Property<DateTime>("updatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("updatedAt");
 
                     b.HasKey("interviewId");
-
-                    b.HasIndex("CollegescollegeId");
 
                     b.HasIndex("applicationId");
 
@@ -272,18 +253,32 @@ namespace College2Career.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("offerId"));
+                    b.Property<string>("annualPackage")
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("annualPackage");
 
                     b.Property<int?>("applicationId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("createdAt");
 
+                    b.Property<string>("description")
+                        .HasColumnType("varchar(2000)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("joiningDate")
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("joiningDate");
+
                     b.Property<string>("offerLetter")
-                        .HasColumnType("varchar(1000)")
+                        .HasColumnType("varchar(4000)")
                         .HasColumnName("offerLetter");
+
+                    b.Property<string>("position")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("position");
 
                     b.Property<string>("reason")
                         .HasColumnType("varchar(1000)")
@@ -293,11 +288,14 @@ namespace College2Career.Migrations
                         .HasColumnType("varchar(15)")
                         .HasColumnName("status");
 
+                    b.Property<string>("timing")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("timing");
+
                     b.HasKey("offerId");
 
                     b.HasIndex("applicationId")
-                        .IsUnique()
-                        .HasFilter("[applicationId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Offers");
                 });
@@ -308,8 +306,6 @@ namespace College2Career.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("placementId"));
-
                     b.Property<int?>("collegeId")
                         .HasColumnType("int");
 
@@ -317,7 +313,7 @@ namespace College2Career.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("createdAt");
 
                     b.Property<string>("placementDate")
@@ -353,8 +349,6 @@ namespace College2Career.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("roleId"));
-
                     b.Property<string>("role")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("role");
@@ -362,6 +356,18 @@ namespace College2Career.Migrations
                     b.HasKey("roleId");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            roleId = 1,
+                            role = "student"
+                        },
+                        new
+                        {
+                            roleId = 2,
+                            role = "company"
+                        });
                 });
 
             modelBuilder.Entity("College2Career.Models.Students", b =>
@@ -370,14 +376,12 @@ namespace College2Career.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("studentId"));
-
                     b.Property<string>("course")
                         .HasColumnType("varchar(25)")
                         .HasColumnName("course");
 
                     b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("createdAt");
 
                     b.Property<string>("graduationYear")
@@ -410,8 +414,7 @@ namespace College2Career.Migrations
                     b.HasKey("studentId");
 
                     b.HasIndex("usersId")
-                        .IsUnique()
-                        .HasFilter("[usersId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Students");
                 });
@@ -422,10 +425,8 @@ namespace College2Career.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("usersId"));
-
                     b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("createdAt");
 
                     b.Property<string>("email")
@@ -444,7 +445,7 @@ namespace College2Career.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("tokenExpirationTime")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("tokenExpirationTime");
 
                     b.HasKey("usersId");
@@ -460,8 +461,6 @@ namespace College2Career.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("vacancyId"));
-
                     b.Property<string>("annualPackage")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("annualPackage");
@@ -471,7 +470,7 @@ namespace College2Career.Migrations
                         .HasColumnName("companyId");
 
                     b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("createdAt");
 
                     b.Property<string>("description")
@@ -507,7 +506,7 @@ namespace College2Career.Migrations
                         .HasColumnName("type");
 
                     b.Property<DateTime>("updatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("updatedAt");
 
                     b.HasKey("vacancyId");
@@ -567,10 +566,6 @@ namespace College2Career.Migrations
 
             modelBuilder.Entity("College2Career.Models.Interviews", b =>
                 {
-                    b.HasOne("College2Career.Models.Colleges", null)
-                        .WithMany("Interviews")
-                        .HasForeignKey("CollegescollegeId");
-
                     b.HasOne("College2Career.Models.Applications", "Applications")
                         .WithMany("Interviews")
                         .HasForeignKey("applicationId");
@@ -653,8 +648,6 @@ namespace College2Career.Migrations
             modelBuilder.Entity("College2Career.Models.Colleges", b =>
                 {
                     b.Navigation("Feedbacks");
-
-                    b.Navigation("Interviews");
 
                     b.Navigation("Placements");
                 });

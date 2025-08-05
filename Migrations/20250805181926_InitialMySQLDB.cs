@@ -1,60 +1,79 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace College2Career.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDatabase : Migration
+    public partial class InitialMySQLDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateTable(
                 name: "Colleges",
                 columns: table => new
                 {
                     collegeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    collegeName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    establishedDate = table.Column<string>(type: "varchar(50)", nullable: true),
-                    contactNumber = table.Column<string>(type: "varchar(50)", nullable: true),
-                    profilePicture = table.Column<string>(type: "varchar(500)", nullable: true),
-                    area = table.Column<string>(type: "varchar(50)", nullable: true),
-                    city = table.Column<string>(type: "varchar(50)", nullable: true),
-                    state = table.Column<string>(type: "varchar(50)", nullable: true),
-                    createdAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    collegeName = table.Column<string>(type: "varchar(200)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    establishedDate = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    contactNumber = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    profilePicture = table.Column<string>(type: "varchar(1000)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    address = table.Column<string>(type: "varchar(350)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    city = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    state = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    createdAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Colleges", x => x.collegeId);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
                     roleId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     role = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.roleId);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
                     usersId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    email = table.Column<string>(type: "varchar(50)", nullable: true),
-                    password = table.Column<string>(type: "varchar(255)", nullable: true),
-                    forgotPasswordToken = table.Column<string>(type: "varchar(255)", nullable: true),
-                    tokenExpirationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    createdAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    email = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    password = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    forgotPasswordToken = table.Column<string>(type: "varchar(500)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    tokenExpirationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    createdAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     roleId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -65,27 +84,39 @@ namespace College2Career.Migrations
                         column: x => x.roleId,
                         principalTable: "Roles",
                         principalColumn: "roleId");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Companies",
                 columns: table => new
                 {
                     companyId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    companyName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    establishedDate = table.Column<string>(type: "varchar(50)", nullable: true),
-                    contactNumber = table.Column<string>(type: "varchar(50)", nullable: true),
-                    profilePicture = table.Column<string>(type: "varchar(500)", nullable: true),
-                    industry = table.Column<string>(type: "varchar(50)", nullable: true),
-                    area = table.Column<string>(type: "varchar(50)", nullable: true),
-                    city = table.Column<string>(type: "varchar(50)", nullable: true),
-                    state = table.Column<string>(type: "varchar(50)", nullable: true),
-                    employeeSize = table.Column<string>(type: "varchar(10)", nullable: true),
-                    reasonOfStatus = table.Column<string>(type: "varchar(100)", nullable: true),
-                    status = table.Column<string>(type: "varchar(20)", nullable: true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    companyName = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    establishedDate = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    contactNumber = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    profilePicture = table.Column<string>(type: "varchar(1000)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    industry = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    address = table.Column<string>(type: "varchar(350)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    city = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    state = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    employeeSize = table.Column<string>(type: "varchar(10)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    reasonOfStatus = table.Column<string>(type: "varchar(1000)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    status = table.Column<string>(type: "varchar(20)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     usersId = table.Column<int>(type: "int", nullable: true),
-                    createdAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    createdAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -95,23 +126,31 @@ namespace College2Career.Migrations
                         column: x => x.usersId,
                         principalTable: "Users",
                         principalColumn: "usersId");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Students",
                 columns: table => new
                 {
                     studentId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    studentName = table.Column<string>(type: "varchar(50)", nullable: true),
-                    rollNumber = table.Column<string>(type: "varchar(15)", nullable: true),
-                    course = table.Column<string>(type: "varchar(25)", nullable: true),
-                    graduationYear = table.Column<string>(type: "varchar(15)", nullable: true),
-                    resume = table.Column<string>(type: "varchar(500)", nullable: true),
-                    status = table.Column<string>(type: "varchar(15)", nullable: true),
-                    statusReason = table.Column<string>(type: "varchar(255)", nullable: true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    studentName = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    rollNumber = table.Column<string>(type: "varchar(15)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    course = table.Column<string>(type: "varchar(25)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    graduationYear = table.Column<string>(type: "varchar(15)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    resume = table.Column<string>(type: "varchar(1000)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    status = table.Column<string>(type: "varchar(15)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    statusReason = table.Column<string>(type: "varchar(1000)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     usersId = table.Column<int>(type: "int", nullable: true),
-                    createdAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    createdAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -122,24 +161,35 @@ namespace College2Career.Migrations
                         principalTable: "Users",
                         principalColumn: "usersId",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Vacancies",
                 columns: table => new
                 {
                     vacancyId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    title = table.Column<string>(type: "varchar(50)", nullable: true),
-                    description = table.Column<string>(type: "varchar(500)", nullable: true),
-                    eligibility_criteria = table.Column<string>(type: "varchar(200)", nullable: true),
-                    totalVacancy = table.Column<string>(type: "varchar(10)", nullable: true),
-                    timing = table.Column<string>(type: "varchar(50)", nullable: true),
-                    package = table.Column<string>(type: "varchar(50)", nullable: true),
-                    type = table.Column<string>(type: "varchar(15)", nullable: true),
-                    locationType = table.Column<string>(type: "varchar(15)", nullable: true),
-                    status = table.Column<string>(type: "varchar(15)", nullable: true),
-                    createdAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    title = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    description = table.Column<string>(type: "varchar(3000)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    eligibility_criteria = table.Column<string>(type: "varchar(3000)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    totalVacancy = table.Column<string>(type: "varchar(10)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    timing = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    annualPackage = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    type = table.Column<string>(type: "varchar(15)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    locationType = table.Column<string>(type: "varchar(15)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    status = table.Column<string>(type: "varchar(15)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    createdAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    updatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     companyId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -150,20 +200,23 @@ namespace College2Career.Migrations
                         column: x => x.companyId,
                         principalTable: "Companies",
                         principalColumn: "companyId");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Feedbacks",
                 columns: table => new
                 {
                     feedbackId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    comments = table.Column<string>(type: "varchar(500)", nullable: true),
-                    rating = table.Column<string>(type: "varchar(10)", nullable: true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    comments = table.Column<string>(type: "varchar(1000)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    rating = table.Column<string>(type: "varchar(10)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     studentId = table.Column<int>(type: "int", nullable: true),
                     companyId = table.Column<int>(type: "int", nullable: true),
                     collegeId = table.Column<int>(type: "int", nullable: true),
-                    createdAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    createdAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -186,17 +239,21 @@ namespace College2Career.Migrations
                         principalTable: "Students",
                         principalColumn: "studentId",
                         onDelete: ReferentialAction.SetNull);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Applications",
                 columns: table => new
                 {
                     applicationId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    reason = table.Column<string>(type: "varchar(300)", nullable: true),
-                    status = table.Column<string>(type: "varchar(15)", nullable: true),
-                    createdAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    reason = table.Column<string>(type: "varchar(1000)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    status = table.Column<string>(type: "varchar(25)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    createdAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    updatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     studentId = table.Column<int>(type: "int", nullable: true),
                     vacancyId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -213,21 +270,24 @@ namespace College2Career.Migrations
                         column: x => x.vacancyId,
                         principalTable: "Vacancies",
                         principalColumn: "vacancyId");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Placements",
                 columns: table => new
                 {
                     placementId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    placementDate = table.Column<string>(type: "varchar(50)", nullable: true),
-                    salaryPackage = table.Column<string>(type: "varchar(10)", nullable: true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    placementDate = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    salaryPackage = table.Column<string>(type: "varchar(10)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     studentId = table.Column<int>(type: "int", nullable: true),
                     companyId = table.Column<int>(type: "int", nullable: true),
                     collegeId = table.Column<int>(type: "int", nullable: true),
                     vacancyId = table.Column<int>(type: "int", nullable: true),
-                    createdAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    createdAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -252,20 +312,26 @@ namespace College2Career.Migrations
                         column: x => x.vacancyId,
                         principalTable: "Vacancies",
                         principalColumn: "vacancyId");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Interviews",
                 columns: table => new
                 {
                     interviewId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    interviewDate = table.Column<string>(type: "varchar(50)", nullable: true),
-                    interviewTime = table.Column<string>(type: "varchar(50)", nullable: true),
-                    status = table.Column<string>(type: "varchar(15)", nullable: true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    interviewDate = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    interviewTime = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    status = table.Column<string>(type: "varchar(15)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    reason = table.Column<string>(type: "varchar(1000)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     applicationId = table.Column<int>(type: "int", nullable: true),
-                    collegeId = table.Column<int>(type: "int", nullable: true),
-                    createdAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    createdAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    updatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -275,24 +341,33 @@ namespace College2Career.Migrations
                         column: x => x.applicationId,
                         principalTable: "Applications",
                         principalColumn: "applicationId");
-                    table.ForeignKey(
-                        name: "FK_Interviews_Colleges_collegeId",
-                        column: x => x.collegeId,
-                        principalTable: "Colleges",
-                        principalColumn: "collegeId");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Offers",
                 columns: table => new
                 {
                     offerId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    offerLater = table.Column<string>(type: "varchar(500)", nullable: true),
-                    status = table.Column<string>(type: "varchar(15)", nullable: true),
-                    reason = table.Column<string>(type: "varchar(255)", nullable: true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    annualPackage = table.Column<string>(type: "varchar(25)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    joiningDate = table.Column<string>(type: "varchar(20)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    timing = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    position = table.Column<string>(type: "varchar(50)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    description = table.Column<string>(type: "varchar(2000)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    offerLetter = table.Column<string>(type: "varchar(4000)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    status = table.Column<string>(type: "varchar(15)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    reason = table.Column<string>(type: "varchar(1000)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     applicationId = table.Column<int>(type: "int", nullable: true),
-                    createdAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    createdAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -303,6 +378,16 @@ namespace College2Career.Migrations
                         principalTable: "Applications",
                         principalColumn: "applicationId",
                         onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "roleId", "role" },
+                values: new object[,]
+                {
+                    { 1, "student" },
+                    { 2, "company" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -319,8 +404,7 @@ namespace College2Career.Migrations
                 name: "IX_Companies_usersId",
                 table: "Companies",
                 column: "usersId",
-                unique: true,
-                filter: "[usersId] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Feedbacks_collegeId",
@@ -340,21 +424,13 @@ namespace College2Career.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Interviews_applicationId",
                 table: "Interviews",
-                column: "applicationId",
-                unique: true,
-                filter: "[applicationId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Interviews_collegeId",
-                table: "Interviews",
-                column: "collegeId");
+                column: "applicationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Offers_applicationId",
                 table: "Offers",
                 column: "applicationId",
-                unique: true,
-                filter: "[applicationId] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Placements_collegeId",
@@ -380,8 +456,7 @@ namespace College2Career.Migrations
                 name: "IX_Students_usersId",
                 table: "Students",
                 column: "usersId",
-                unique: true,
-                filter: "[usersId] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_roleId",

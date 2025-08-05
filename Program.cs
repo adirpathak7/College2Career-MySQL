@@ -13,7 +13,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<C2CDBContext>(options =>
 {
     options.UseMySql(builder.Configuration.GetConnectionString("College2CareerConnectionString"),
-        new MySqlServerVersion(new Version(8, 0, 33)));
+        new MySqlServerVersion(new Version(8, 0, 33)),
+        mySqlOptions => mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        ));
 });
 
 builder.WebHost.ConfigureKestrel(serverOptions =>

@@ -60,12 +60,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("College2Career",
         policy =>
-    {
-        policy.WithOrigins("http://localhost:5173")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
-    });
+        {
+            policy.WithOrigins("https://college2career-frontend.vercel.app",
+                "https://college2career-frontend.vercel.app",
+                    "https://college2career-frontend-git-main-aaditya-pathas-projects.vercel.app")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
 });
 
 // JWT Authentication Configuration

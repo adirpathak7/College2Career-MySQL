@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register DbContext with SQL Server
+// Register DbContext with MySQL Server
 builder.Services.AddDbContext<C2CDBContext>(options =>
 {
     options.UseMySql(builder.Configuration.GetConnectionString("College2CareerConnectionString"),

@@ -12,9 +12,9 @@ public class CloudinaryService : ICloudinaryService
     private readonly Cloudinary cloudinary;
     public CloudinaryService(IConfiguration configuration)
     {
-        var cloudName = configuration["Cloudinary:CloudName"];
-        var apiKey = configuration["Cloudinary:ApiKey"];
-        var apiSecret = configuration["Cloudinary:ApiSecret"];
+        var cloudName = configuration["CLOUDINARY_CLOUD_NAME"];
+        var apiKey = configuration["CLOUDINARY_API_KEY"];
+        var apiSecret = configuration["CLOUDINARY_API_SECRET"];
 
         var account = new Account(cloudName, apiKey, apiSecret);
         cloudinary = new Cloudinary(account);

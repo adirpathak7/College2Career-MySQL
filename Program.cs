@@ -116,6 +116,7 @@ builder.Services.AddAuthentication(options =>
 
 Console.WriteLine("JWT_SECRET length: " + (Environment.GetEnvironmentVariable("JWT_SECRET")?.Length ?? 0));
 Console.WriteLine("JWT_SECRET value starts with: " + Environment.GetEnvironmentVariable("JWT_SECRET")?.Substring(0, 5));
+Console.WriteLine("JWT_SECRET length: " + Environment.GetEnvironmentVariable("JWT_SECRET"));
 
 
 var app = builder.Build();

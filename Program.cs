@@ -86,40 +86,34 @@ builder.Services.AddCors(options =>
 });
 
 // JWT Authentication Configuration
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET");
+var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? "C2COwner";
+var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? "C2CUsers";
+
+if (string.IsNullOrWhiteSpace(jwtKey))
+{
+    throw new Exception("JWT_SECRET is missing.");
+}
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET");
-        var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
-        var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtAudience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+    };
+});
 
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtIssuer,
-            ValidAudience = jwtAudience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!))
-        };
-
-        options.Events = new JwtBearerEvents
-        {
-            OnForbidden = async context =>
-            {
-                context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                context.Response.ContentType = "application/json";
-
-                var response = new
-                {
-                    message = "Unauthorized! Only authorized users can access this endpoint."
-                };
-                await context.Response.WriteAsync(JsonSerializer.Serialize(response));
-            }
-        };
-    });
-Console.WriteLine("JWT_SECRET:- " + Environment.GetEnvironmentVariable("JWT_SECRET"));
 
 var app = builder.Build();
 

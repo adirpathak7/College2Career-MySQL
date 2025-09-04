@@ -95,6 +95,14 @@ if (string.IsNullOrWhiteSpace(jwtKey))
     throw new Exception("JWT_SECRET is missing.");
 }
 
+byte[] keyBytes = Encoding.UTF8.GetBytes(jwtKey);
+int minBytes = 32; // 256 bits
+
+if (keyBytes.Length < minBytes)
+{
+    Array.Resize(ref keyBytes, minBytes);
+}
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -105,12 +113,12 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
+        IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtIssuer,
         ValidAudience = jwtAudience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
     };
 });
 

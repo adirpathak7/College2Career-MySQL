@@ -19,10 +19,10 @@ public class JWTService : IJWTService
 
     public JWTService(IConfiguration configuration)
     {
-        secretKey = configuration["Jwt:Key"];
-        issuer = configuration["Jwt:Issuer"];
-        audience = configuration["Jwt:Audience"];
-        expires = int.Parse(configuration["Jwt:Expires"]);
+        secretKey = Environment.GetEnvironmentVariable("JWT_SECRET");
+        issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? "C2COwner";
+        audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? "C2CUsers";
+        expires = int.TryParse(Environment.GetEnvironmentVariable("JWT_EXPIRES"), out var e) ? e : 1;
     }
 
     public string generateToken(Users users)

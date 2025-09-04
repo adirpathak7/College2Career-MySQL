@@ -123,20 +123,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 var app = builder.Build();
 
 // Apply pending migrations automatically
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<C2CDBContext>();
+//using (var scope = app.Services.CreateScope())
+//{
+//    var dbContext = scope.ServiceProvider.GetRequiredService<C2CDBContext>();
 
-    try
-    {
-        dbContext.Database.Migrate();
-        Console.WriteLine("EF Migrations applied successfully.");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine("Error applying migrations: " + ex.Message);
-    }
-}
+//    try
+//    {
+//        dbContext.Database.Migrate();
+//        Console.WriteLine("EF Migrations applied successfully.");
+//    }
+//    catch (Exception ex)
+//    {
+//        Console.WriteLine("Error applying migrations: " + ex.Message);
+//    }
+//}
 
 
 if (app.Environment.IsDevelopment())

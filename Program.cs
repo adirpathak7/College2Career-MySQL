@@ -3,17 +3,29 @@ using System.Text.Json;
 using College2Career.Data;
 using College2Career.Repository;
 using College2Career.Service;
+using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
+// Load environment variables from .env
+Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Build connection string from .env
+var connectionString = $"Server={Environment.GetEnvironmentVariable("DB_HOST")};" +
+                       $"Port={Environment.GetEnvironmentVariable("DB_PORT")};" +
+                       $"Database={Environment.GetEnvironmentVariable("DB_NAME")};" +
+                       $"User={Environment.GetEnvironmentVariable("DB_USER")};" +
+                       $"Password={Environment.GetEnvironmentVariable("DB_PASSWORD")};" +
+                       "SslMode=Required;";
 
 // Register DbContext with MySQL Server
 builder.Services.AddDbContext<C2CDBContext>(options =>
 {
-    options.UseMySql(builder.Configuration.GetConnectionString("College2CareerConnectionString"),
-        new MySqlServerVersion(new Version(8, 0, 33)),
+    options.UseMySql(connectionString,
+        new MySqlServerVersion(new Version(8, 0, 35)),
         mySqlOptions => mySqlOptions.EnableRetryOnFailure(
             maxRetryCount: 5,
             maxRetryDelay: TimeSpan.FromSeconds(10),
@@ -26,7 +38,7 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     serverOptions.ListenAnyIP(7072);
 });
 
-// Registered Repository
+// Registered Repositories
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<ICompaniesRepository, CompaniesRepository>();
 builder.Services.AddScoped<ICollegesRepository, CollegesRepository>();
@@ -46,15 +58,12 @@ builder.Services.AddScoped<IApplicationsService, ApplicationsService>();
 builder.Services.AddScoped<IInterviewsService, InterviewsService>();
 builder.Services.AddScoped<IOffersService, OffersService>();
 
-// Registered Helper Services
+// Helper Services
 builder.Services.AddSingleton<IJWTService, JWTService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
-// Add services to the container.
 builder.Services.AddControllers();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -63,31 +72,35 @@ builder.WebHost.UseUrls("http://10.0.2.2:7072");
 // Allow CORS for College2Career React App
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("College2Career",
-        policy =>
-        {
-            policy.WithOrigins("https://college2career-frontend.vercel.app",
+    options.AddPolicy("College2Career", policy =>
+    {
+        policy.WithOrigins(
+                "https://college2career-frontend.vercel.app",
                 "http://localhost:5173",
-                    "https://college2career-frontend-git-main-aaditya-pathas-projects.vercel.app")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod()
-                  .AllowCredentials();
-        });
+                "https://college2career-frontend-git-main-aaditya-pathas-projects.vercel.app")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
 });
 
 // JWT Authentication Configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET");
+        var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
+        var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!))
         };
 
         options.Events = new JwtBearerEvents
@@ -108,7 +121,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -118,11 +130,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("College2Career");
 
 app.UseAuthentication();
-
 app.UseAuthorization();
-
 app.UseHttpsRedirection();
-
 app.MapControllers();
-
 app.Run();

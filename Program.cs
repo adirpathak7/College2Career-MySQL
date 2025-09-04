@@ -67,7 +67,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins("https://college2career-frontend.vercel.app",
-                "https://college2career-frontend.vercel.app",
+                "http://localhost:5173",
                     "https://college2career-frontend-git-main-aaditya-pathas-projects.vercel.app")
                   .AllowAnyHeader()
                   .AllowAnyMethod()

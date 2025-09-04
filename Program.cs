@@ -20,6 +20,7 @@ var connectionString = $"Server={Environment.GetEnvironmentVariable("DB_HOST")};
                        $"User={Environment.GetEnvironmentVariable("DB_USER")};" +
                        $"Password={Environment.GetEnvironmentVariable("DB_PASSWORD")};" +
                        "SslMode=Required;";
+
 Console.WriteLine("connectionString:- " + connectionString);
 // Register DbContext with MySQL Server
 builder.Services.AddDbContext<C2CDBContext>(options =>

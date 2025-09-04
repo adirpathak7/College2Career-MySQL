@@ -86,45 +86,39 @@ builder.Services.AddCors(options =>
 });
 
 // JWT Authentication Configuration
-var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET");
 var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? "C2COwner";
 var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? "C2CUsers";
-
+var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET");
 if (string.IsNullOrWhiteSpace(jwtKey))
-{
     throw new Exception("JWT_SECRET is missing.");
-}
 
 byte[] keyBytes = Encoding.UTF8.GetBytes(jwtKey);
-int minBytes = 32; // 256 bits
 
-if (keyBytes.Length < minBytes)
-{
-    Array.Resize(ref keyBytes, minBytes);
-}
+if (keyBytes.Length < 32)
+    throw new Exception("JWT_SECRET must be at least 32 bytes (256 bits) for HMACSHA256.");
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
+// No padding needed here if already >32 bytes
+
+var symmetricKey = new SymmetricSecurityKey(keyBytes);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        ValidateIssuer = true,
-        IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtIssuer,
-        ValidAudience = jwtAudience,
-    };
-});
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = symmetricKey,
+        };
+    });
 
 Console.WriteLine("JWT_SECRET length: " + (Environment.GetEnvironmentVariable("JWT_SECRET")?.Length ?? 0));
 Console.WriteLine("JWT_SECRET value starts with: " + Environment.GetEnvironmentVariable("JWT_SECRET")?.Substring(0, 5));
-Console.WriteLine("JWT_SECRET length: " + Environment.GetEnvironmentVariable("JWT_SECRET"));
+Console.WriteLine("JWT_SECRET value: " + Environment.GetEnvironmentVariable("JWT_SECRET"));
 
 
 var app = builder.Build();

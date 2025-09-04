@@ -114,6 +114,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+Console.WriteLine("JWT_SECRET:- " + Environment.GetEnvironmentVariable("JWT_SECRET"));
+
 
 var app = builder.Build();
 
